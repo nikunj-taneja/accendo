@@ -2,7 +2,6 @@ import React from "react";
 import Masonry from "react-masonry-component";
 
 import "../styles/Gallery.css";
-import { Container } from "react-bootstrap";
 
 const masonryOptions = {
   columnWidth: 300,
