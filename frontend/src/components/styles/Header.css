@@ -1,0 +1,21 @@
+.navbar {
+  background: transparent;
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+  z-index: 1;
+}
+
+.header-name {
+  font-family: "Dancing Script";
+  font-weight: 400;
+  color: #393e46;
+}
+
+.navbar-brand {
+  font-size: 2em !important;
+  width: 100px;
+}
+
+.top-nav-collapse {
+  background-color: black;
+}

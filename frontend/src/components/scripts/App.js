@@ -1,14 +1,12 @@
 import React from "react";
 
+import Header from "./Header";
+
 import "../styles/App.css";
 
 class App extends React.Component {
   render() {
-    return (
-      <div>
-        <h1>Accendo</h1>
-      </div>
-    );
+    return <Header />;
   }
 }
 
