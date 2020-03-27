@@ -8,11 +8,12 @@
 .navbar-brand {
   font-family: "Dancing Script";
   font-weight: 400;
-  color: #2ecc71 !important;
+  color: #40d47e !important;
   font-size: 2em !important;
   width: 100px;
 }
 
 .nav-link {
+  font-family: "Sen";
   color: #eeeeee !important;
 }
