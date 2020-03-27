@@ -24,3 +24,11 @@ body {
   padding: 0 !important;
   margin: 25px !important;
 }
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited {
+  background-color: #40d47e !important;
+  border: none !important;
+}

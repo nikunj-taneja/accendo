@@ -6,6 +6,8 @@ import { Navbar, Nav } from "react-bootstrap";
 
 import "../styles/Header.css";
 
+import LoginModal from "./LoginModal";
+
 class Header extends React.Component {
   render() {
     return (
@@ -16,18 +18,20 @@ class Header extends React.Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse>
           <Nav className="mr-auto">
-            <Nav.Link>
+            <Nav.Item>
               <Link to="/Gallery">Gallery</Link>
-            </Nav.Link>
-            <Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
               <Link to="/Profile">Profile</Link>
-            </Nav.Link>
+            </Nav.Item>
           </Nav>
           <Nav>
-            <Nav.Link>Login</Nav.Link>
-            <Nav.Link>
+            <Nav.Item>
+              <LoginModal />
+            </Nav.Item>
+            <Nav.Item>
               <Link to="/SignUp">Sign Up</Link>
-            </Nav.Link>
+            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
