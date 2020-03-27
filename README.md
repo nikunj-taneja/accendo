@@ -14,13 +14,16 @@ CSCI3100 Project to create a web app where users can upload images, have them su
 
 ### Stylize
 
-Example:
+#### Example:
 
-Image to be stylized
+##### Image to be stylized
+
 ![input1](/showcase_images/MLmodel/hong_kong.jpg)
 
-Style image
+##### Style image
+
 ![input2](/showcase_images/MLmodel/wave.jpg)
 
-Output
+##### Output
+
 ![output](/showcase_images/MLmodel/output.jpg)
