@@ -7,5 +7,5 @@ CSCI3100 Project to create a web app where users can upload images, have them su
 ## FrontEnd
 
 ![gallery](/showcase_images/frontend/gallery.png)
-![login](/showcase_images/frontend/login.png)
-![signup](/showcase_images/frontend/signup.png)
+![login](/showcase_images/frontend/login.PNG)
+![signup](/showcase_images/frontend/signup.PNG)
