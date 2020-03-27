@@ -10,20 +10,23 @@ CSCI3100 Project to create a web app where users can upload images, have them su
 ![login](/showcase_images/frontend/login.PNG)
 ![signup](/showcase_images/frontend/signup.PNG)
 
-## Machine Learning Models
+## Deep Learning Models
 
 ### Stylize
 
 #### Example:
 
-##### Image to be stylized
+##### Content Image
 
-![input1](/showcase_images/MLmodel/hong_kong.jpg)
+![content](/showcase_images/MLmodel/hong_kong.jpg)
 
-##### Style image
+##### Style Image
 
-![input2](/showcase_images/MLmodel/wave.jpg)
+![style](/showcase_images/MLmodel/wave.jpg)
 
-##### Output
+##### Stylized Image
 
 ![output](/showcase_images/MLmodel/output.jpg)
+
+## References
+Johnson, Justin, Alexandre Alahi, and Li Fei-Fei. "Perceptual losses for real-time style transfer and super-resolution." European conference on computer vision. Springer, Cham, 2016. [https://arxiv.org/abs/1603.08155]
