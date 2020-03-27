@@ -23,6 +23,13 @@ body {
 .bodyText {
   color: #eeeeee;
 }
+
+.bodyInput {
+  background-color: #141e30 !important;
+  color: #eeeeee !important;
+  border: 1px solid #092715 !important;
+}
+
 .main-body {
   padding: 0 !important;
   margin: 25px !important;
