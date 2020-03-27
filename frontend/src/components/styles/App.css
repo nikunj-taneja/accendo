@@ -3,7 +3,6 @@ html {
 }
 
 body {
-  height: 100vh;
   font-family: "Sen";
 
   background: #141e30; /* fallback for old browsers */
@@ -18,6 +17,8 @@ body {
     #223750,
     #141e30
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 .bodyText {
@@ -31,8 +32,11 @@ body {
 }
 
 .main-body {
+  max-width: 90vw !important;
+  width: 100%;
+  height: 100%;
   padding: 0 !important;
-  margin: 25px !important;
+  margin: 25px auto auto auto !important;
 }
 
 .btn-primary,
