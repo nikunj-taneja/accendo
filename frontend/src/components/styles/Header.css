@@ -5,17 +5,14 @@
   z-index: 1;
 }
 
-.header-name {
+.navbar-brand {
   font-family: "Dancing Script";
   font-weight: 400;
-  color: #393e46;
-}
-
-.navbar-brand {
+  color: #2ecc71 !important;
   font-size: 2em !important;
   width: 100px;
 }
 
-.top-nav-collapse {
-  background-color: black;
+.nav-link {
+  color: #eeeeee !important;
 }
