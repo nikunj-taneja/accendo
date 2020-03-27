@@ -1,7 +1,8 @@
 .navbar {
-  background: transparent;
-  padding-left: 50px !important;
-  padding-right: 50px !important;
+  line-height: 1.5;
+  background: #00000020;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
   z-index: 1;
 }
 
@@ -10,10 +11,12 @@
   font-weight: 400;
   color: #40d47e !important;
   font-size: 2em !important;
-  width: 100px;
+  width: 150px;
 }
 
 .nav-link {
+  font-size: 1em;
   font-family: "Sen";
+  width: 100px;
   color: #eeeeee !important;
 }

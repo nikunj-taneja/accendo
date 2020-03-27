@@ -1,6 +1,11 @@
+html {
+  font-size: 100%;
+}
+
 body {
   height: 100vh;
   font-family: "Sen";
+
   background: #141e30; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to bottom,
