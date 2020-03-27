@@ -43,7 +43,7 @@ class CoMatch(nn.Module):
     def __repr__(self):
         return self.__class__.__name__ + '('             + 'N x ' + str(self.C) + ')'
 
-# some basic layers, with reflectance padding
+# some basic layers
 class ConvLayer(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride):
         super(ConvLayer, self).__init__()
@@ -75,11 +75,8 @@ class UpSampleConvLayer(nn.Module):
         out = self.conv2d(x)
         return out
 
+# pre activation layers
 class Bottleneck(nn.Module):
-    """ Pre-activation residual block
-    Identity Mapping in Deep Residual Networks
-    ref https://arxiv.org/abs/1603.05027
-    """
     def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=nn.BatchNorm2d):
         super(Bottleneck, self).__init__()
         self.expansion = 4
@@ -107,10 +104,6 @@ class Bottleneck(nn.Module):
         return residual + self.conv_block(x)
     
 class UpSampleBottleneck(nn.Module):
-    """ Up-sample residual block (from MSG-Net paper)
-    Enables passing identity all the way through the generator
-    ref https://arxiv.org/abs/1703.06953
-    """
     def __init__(self, inplanes, planes, stride=2, norm_layer=nn.BatchNorm2d):
         super(UpSampleBottleneck, self).__init__()
         self.expansion = 4
@@ -131,7 +124,7 @@ class UpSampleBottleneck(nn.Module):
     def forward(self, x):
         return  self.residual_layer(x) + self.conv_block(x)
 
-# the MSG-Net
+# the style transfer model
 class Model(nn.Module):
     def __init__(self, input_nc=3, output_nc=3, ngf=64, norm_layer=nn.InstanceNorm2d, n_blocks=6, gpu_ids=[]):
         super(Model, self).__init__()
