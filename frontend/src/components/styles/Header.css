@@ -20,3 +20,8 @@
   width: 100px;
   color: #eeeeee !important;
 }
+
+a {
+  color: white !important;
+  text-decoration: none !important;
+}

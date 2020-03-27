@@ -1,5 +1,7 @@
 import React from "react";
 
+import { Link } from "react-router-dom";
+
 import { Navbar, Nav } from "react-bootstrap";
 
 import "../styles/Header.css";
@@ -14,12 +16,18 @@ class Header extends React.Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse>
           <Nav className="mr-auto">
-            <Nav.Link href="#gallery">Gallery</Nav.Link>
-            <Nav.Link href="#profile">Profile</Nav.Link>
+            <Nav.Link>
+              <Link to="/Gallery">Gallery</Link>
+            </Nav.Link>
+            <Nav.Link>
+              <Link to="/Profile">Profile</Link>
+            </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#login">Login</Nav.Link>
-            <Nav.Link href="#signup">Sign Up</Nav.Link>
+            <Nav.Link>Login</Nav.Link>
+            <Nav.Link>
+              <Link to="/SignUp">Sign Up</Link>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
