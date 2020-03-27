@@ -11,18 +11,18 @@ class User {
   }
 
   rateImage() {
-    //TODO Implement rateImage
+    //TODO Implement User.rateImage
   }
 
   uploadImage() {
-    //TODO Implement uploadImage
+    //TODO Implement User.uploadImage
   }
 
   login() {
-    //TODO Implement login
+    //TODO Implement User.login
   }
 
   signUp() {
-    //TODO Implement signUp
+    //TODO Implement User.signUp
   }
 }
