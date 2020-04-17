@@ -24,7 +24,11 @@ class Header extends React.Component {
             </Nav.Item>
           </Nav>
           <Nav>
-            <h6 className="bodyText">Not Logged in</h6>
+            <Nav.Item>
+              <Link to="/">
+                <h6 className="bodyText">Not Logged in</h6>
+              </Link>
+            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
