@@ -1,57 +1,114 @@
-import os 
-import numpy as np 
-import cv2 
-from matplotlib import pyplot as plt 
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+from os import listdir
+from os.path import join
+
+from PIL import Image
+from torch.utils.data.dataset import Dataset
+from torchvision.transforms import Compose, RandomCrop, ToTensor, ToPILImage, CenterCrop, Resize
+
+
+# In[2]:
+
+
+def is_image_file(filename):
+    return any(filename.endswith(extension) for extension in ['.png', '.jpg', '.jpeg', '.PNG', '.JPG', '.JPEG'])
+
+
+def calculate_valid_crop_size(crop_size, upscale_factor):
+    return crop_size - (crop_size % upscale_factor)
+
+
+def train_hr_transform(crop_size):
+    return Compose([
+        RandomCrop(crop_size),
+        ToTensor(),
+    ])
+
+
+def train_lr_transform(crop_size, upscale_factor):
+    return Compose([
+        ToPILImage(),
+        Resize(crop_size // upscale_factor, interpolation=Image.BICUBIC),
+        ToTensor()
+    ])
+
+
+def display_transform():
+    return Compose([
+        ToPILImage(),
+        Resize(400),
+        CenterCrop(400),
+        ToTensor()
+    ])
+
+
+class TrainDatasetFromFolder(Dataset):
+    def __init__(self, dataset_dir, crop_size, upscale_factor):
+        super(TrainDatasetFromFolder, self).__init__()
+        self.image_filenames = [join(dataset_dir, x) for x in listdir(dataset_dir) if is_image_file(x)]
+        crop_size = calculate_valid_crop_size(crop_size, upscale_factor)
+        self.hr_transform = train_hr_transform(crop_size)
+        self.lr_transform = train_lr_transform(crop_size, upscale_factor)
+
+    def __getitem__(self, index):
+        hr_image = self.hr_transform(Image.open(self.image_filenames[index]))
+        lr_image = self.lr_transform(hr_image)
+        return lr_image, hr_image
+
+    def __len__(self):
+        return len(self.image_filenames)
+
+
+class ValDatasetFromFolder(Dataset):
+    def __init__(self, dataset_dir, upscale_factor):
+        super(ValDatasetFromFolder, self).__init__()
+        self.upscale_factor = upscale_factor
+        self.image_filenames = [join(dataset_dir, x) for x in listdir(dataset_dir) if is_image_file(x)]
+
+    def __getitem__(self, index):
+        hr_image = Image.open(self.image_filenames[index])
+        w, h = hr_image.size
+        crop_size = calculate_valid_crop_size(min(w, h), self.upscale_factor)
+        lr_scale = Resize(crop_size // self.upscale_factor, interpolation=Image.BICUBIC)
+        hr_scale = Resize(crop_size, interpolation=Image.BICUBIC)
+        hr_image = CenterCrop(crop_size)(hr_image)
+        lr_image = lr_scale(hr_image)
+        hr_restore_img = hr_scale(lr_image)
+        return ToTensor()(lr_image), ToTensor()(hr_restore_img), ToTensor()(hr_image)
+
+    def __len__(self):
+        return len(self.image_filenames)
+
+
+class TestDatasetFromFolder(Dataset):
+    def __init__(self, dataset_dir, upscale_factor):
+        super(TestDatasetFromFolder, self).__init__()
+        self.lr_path = dataset_dir + '/SRF_' + str(upscale_factor) + '/data/'
+        self.hr_path = dataset_dir + '/SRF_' + str(upscale_factor) + '/target/'
+        self.upscale_factor = upscale_factor
+        self.lr_filenames = [join(self.lr_path, x) for x in listdir(self.lr_path) if is_image_file(x)]
+        self.hr_filenames = [join(self.hr_path, x) for x in listdir(self.hr_path) if is_image_file(x)]
+
+    def __getitem__(self, index):
+        image_name = self.lr_filenames[index].split('/')[-1]
+        lr_image = Image.open(self.lr_filenames[index])
+        w, h = lr_image.size
+        hr_image = Image.open(self.hr_filenames[index])
+        hr_scale = Resize((self.upscale_factor * h, self.upscale_factor * w), interpolation=Image.BICUBIC)
+        hr_restore_img = hr_scale(lr_image)
+        return image_name, ToTensor()(lr_image), ToTensor()(hr_restore_img), ToTensor()(hr_image)
+
+    def __len__(self):
+        return len(self.lr_filenames)
+
+
+# In[ ]:
 
 
 
-# Load images and resizing as numpy array 
-def load_images(image_list,path,resize=False):
-    images=[]
-    for image in (image_list):
-        if resize==True:
-            img = cv2.resize(cv2.imread(os.path.join(path,image)),(256,256)) 
-        else:
-            img = cv2.imread(os.path.join(path,image))
-        img = img.reshape(img.shape[2],img.shape[0],img.shape[1])
-        images.append(img)
-    return np.array(images)
-
-
-
-#loading model check point
-def load_checkpoint(filepath):
-    checkpoint = torch.load(filepath)
-    model = checkpoint['model']
-    model.load_state_dict(checkpoint['state_dict'])
-    for parameter in model.parameters():
-        parameter.requires_grad = False
-    
-    model.eval()
-    
-    return model
-
-
-#image post processing after computation by the model and generating high res pictures
-def image_post_process(image_dir,model_path):
-    imagelist=[]
-#     images = os.listdir(imagedir)
-    for img in image_dir:
-        img = os.path.join(data,img)
-#         print(img)
-        img = cv2.imread(img)
-        imagelist.append(img)
-    imagearray = np.array(imagelist)/255
-#     imagearray = (imagedir)/255
-    imagearray_pt = np.reshape(imagearray,(len(imagelist),imagearray.shape[3],imagearray.shape[1],imagearray.shape[2]))
-    model = load_checkpoint(modelPath)
-    im_tensor = torch.from_numpy(imagearray_pt).float()
-    out_tensor = model(im_tensor)
-#     print(out_tensor.shape)
-    out = np.reshape(out_tensor,[out_tensor.shape[0],out_tensor.shape[2],out_tensor.shape[3],out_tensor.shape[1]])
-    out = out.numpy()
-    
-    out = np.clip(out,0,1)
-    
-    return out
 
