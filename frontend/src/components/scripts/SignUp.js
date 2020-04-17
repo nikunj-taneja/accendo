@@ -32,7 +32,7 @@ class SignUp extends React.Component {
             className="bodyInput"
           ></Form.Control>
         </Form.Group>
-        <div className="text-right">
+        <div className="text-left">
           <Button size="lg">Submit</Button>
         </div>
       </Form>

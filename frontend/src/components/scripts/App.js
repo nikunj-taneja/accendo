@@ -5,6 +5,7 @@ import Header from "./Header";
 import Gallery from "./Gallery";
 import Profile from "./Profile";
 import SignUp from "./SignUp";
+import UserPage from "./UserPage";
 
 import "../styles/App.css";
 import { Container } from "react-bootstrap";
@@ -17,6 +18,9 @@ class App extends React.Component {
 
         <Container className="main-body">
           <Switch>
+            <Route path="/" exact="true">
+              <UserPage />
+            </Route>
             <Route path="/gallery">
               <Gallery />
             </Route>

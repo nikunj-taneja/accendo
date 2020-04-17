@@ -6,13 +6,11 @@ import { Navbar, Nav } from "react-bootstrap";
 
 import "../styles/Header.css";
 
-import LoginModal from "./LoginModal";
-
 class Header extends React.Component {
   render() {
     return (
       <Navbar className="header shadow-sm" expand="lg">
-        <Navbar.Brand href="#home" className="header-name">
+        <Navbar.Brand href="/" className="header-name">
           Accendo
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -26,12 +24,7 @@ class Header extends React.Component {
             </Nav.Item>
           </Nav>
           <Nav>
-            <Nav.Item>
-              <LoginModal />
-            </Nav.Item>
-            <Nav.Item>
-              <Link to="/SignUp">Sign Up</Link>
-            </Nav.Item>
+            <h6 className="bodyText">Not Logged in</h6>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
