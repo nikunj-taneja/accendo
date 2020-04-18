@@ -1,15 +1,6 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import torch
 from torch import nn
 from torchvision.models.vgg import vgg16
-
-
-# In[2]:
 
 
 class GeneratorLoss(nn.Module):
@@ -58,10 +49,3 @@ class TVLoss(nn.Module):
 if __name__ == "__main__":
     g_loss = GeneratorLoss()
     print(g_loss)
-
-
-# In[ ]:
-
-
-
-

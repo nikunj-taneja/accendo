@@ -1,14 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import math
-import torch
-from torch import nn
 
-# In[2]:
+import torch.nn.functional as F
+from torch import nn
 
 
 class Generator(nn.Module):
@@ -27,7 +20,7 @@ class Generator(nn.Module):
         self.block6 = ResidualBlock(64)
         self.block7 = nn.Sequential(
             nn.Conv2d(64, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64)
+            nn.PReLU()
         )
         block8 = [UpsampleBLock(64, 2) for _ in range(upsample_block_num)]
         block8.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
@@ -43,7 +36,7 @@ class Generator(nn.Module):
         block7 = self.block7(block6)
         block8 = self.block8(block1 + block7)
 
-        return (torch.tanh(block8) + 1) / 2
+        return (F.tanh(block8) + 1) / 2
 
 
 class Discriminator(nn.Module):
@@ -89,7 +82,7 @@ class Discriminator(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        return torch.sigmoid(self.net(x).view(batch_size))
+        return F.sigmoid(self.net(x).view(batch_size))
 
 
 class ResidualBlock(nn.Module):

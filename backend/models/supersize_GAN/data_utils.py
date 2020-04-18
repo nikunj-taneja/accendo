@@ -1,18 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 from os import listdir
 from os.path import join
 
 from PIL import Image
 from torch.utils.data.dataset import Dataset
 from torchvision.transforms import Compose, RandomCrop, ToTensor, ToPILImage, CenterCrop, Resize
-
-
-# In[2]:
 
 
 def is_image_file(filename):
@@ -107,8 +98,4 @@ class TestDatasetFromFolder(Dataset):
         return len(self.lr_filenames)
 
 
-# In[ ]:
-
-
-
-
+        
