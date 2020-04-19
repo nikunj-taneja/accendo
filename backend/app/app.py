@@ -13,7 +13,7 @@ app = Flask(__name__)
 api = Api(app)
 
 client = MongoClient("mongodb://db:27017")
-db = client.Accendo
+db = client.accendo
 fs = GridFS(db)
 users = db["users"]
 images = db["images"]
@@ -65,7 +65,6 @@ class Register(Resource):
             "msg": "User registered"
         })
 
-
 class Stylize(Resource):
     def post(self):
         username = request.form['username']
@@ -97,14 +96,12 @@ class Stylize(Resource):
         stylized_img = style_transfer.process(content_img_id, style_img_id)
         return send_file(fs.get(stylized_img), attachment_filename='output.jpg')
 
-    def get(self):
-        return "<h1>Hi!</h1>"
 
 api.add_resource(Register, "/register")
 api.add_resource(Stylize, "/stylize")
 
 @app.route('/')
-def hi():
+def testing():
     return '''
     <!doctype html>
     <title>testing</title>
