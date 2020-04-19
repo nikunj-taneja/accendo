@@ -4,8 +4,10 @@ from pymongo import MongoClient
 from gridfs import GridFS
 import bcrypt
 import style_transfer
+import supersize_gan
 from PIL import Image
 from werkzeug.utils import secure_filename
+import time 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -67,6 +69,7 @@ class Register(Resource):
 
 class Stylize(Resource):
     def post(self):
+        start = time.time()
         username = request.form['username']
         if 'content_img' in request.files: 
             content_img = request.files['content_img']
@@ -92,13 +95,40 @@ class Stylize(Resource):
                 "status": 301,
                 "msg": "Invalid input"
             })
-
+        style_time = time.time()
         stylized_img = style_transfer.process(content_img_id, style_img_id)
-        return send_file(fs.get(stylized_img), attachment_filename='output.jpg')
+        print('Styling time:', time.time() - style_time)
+        print('Total time:', time.time() - start)
+        return send_file(fs.get(stylized_img), attachment_filename=(str(stylized_img) +'.jpg'))
 
+class Supersize(Resource):
+    def post(self):
+        start = time.time()
+        username = request.form['username']
+        if 'img' in request.files: 
+            img = request.files['img']
+            if img.filename == '':
+                # TODO
+                return 0
+            if img and allowed_file(img.filename):
+                img_id = fs.put(img)
+                # client.save_file(filename, content_img)
+                images.insert_one({'username': username, 'img': img_id})
+        else:
+            return jsonify({
+                "status": 301,
+                "msg": "Invalid input"
+            })
+        
+        supersize = time.time()
+        supersized_img = supersize_gan.process(img_id)
+        print('Styling time:', time.time() - supersize)
+        print('Total time:', time.time() - start)
+        return send_file(fs.get(supersized_img), attachment_filename=(str(supersized_img) +'.jpg'))
 
 api.add_resource(Register, "/register")
 api.add_resource(Stylize, "/stylize")
+api.add_resource(Supersize, "/supersize")
 
 @app.route('/')
 def testing():
@@ -120,7 +150,12 @@ def testing():
       <input type=file name=style_img>
       <input type=submit value=Upload>
     </form>
+     <form action='/supersize' method=POST enctype=multipart/form-data>
+      <input type=text name=username>
+      <input type=file name=img>
+      <input type=submit value=Upload>
+    </form>
     '''
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(debug=True)

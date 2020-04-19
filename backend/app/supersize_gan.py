@@ -131,27 +131,23 @@ class UpsampleBLock(nn.Module):
         return x
     
     
-def process(image_path):
-
+def process(img_id):
     UPSCALE_FACTOR = 4
     TEST_MODE = 'CPU'
-    IMAGE_NAME = image_path
+    IMAGE_NAME = img_id
 
     model = Generator(UPSCALE_FACTOR).eval()
-    model.load_state_dict(torch.load'./models/pretrained/supersize_gan.pt'), False)
-
-
-    image = Image.open(IMAGE_NAME)
+    model.load_state_dict(torch.load('./models/pretrained/supersize_gan.pt', map_location=torch.device('cpu')), False)
+    image = Image.open(fs.get(IMAGE_NAME))
     with torch.no_grad():
         image = Variable(ToTensor()(image))
     image = image[:3].unsqueeze(0)
 
-
     output = model(image)
-    out_img = ToPILImage()(out[0].data.cpu())
-    file=io.BytesIO()
+    out_img = ToPILImage()(output[0].data.cpu())
+    file = io.BytesIO()
     out_img.save(file, format="JPEG")
-    file_id=fs.put(file.getvalue())
+    file_id = fs.put(file.getvalue())
     #out_img = ToPILImage()(out[0].data.cpu())
     #out_img.save('out_srf_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
     return file_id
