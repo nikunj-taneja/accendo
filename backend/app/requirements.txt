@@ -2,3 +2,7 @@ flask
 flask_restful
 pymongo
 bcrypt
+numpy
+pillow
+torch
+torchvision

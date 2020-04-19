@@ -1,14 +1,20 @@
 import os
+import io
 import torch
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 from PIL import Image
+from pymongo import MongoClient
+from gridfs import GridFS
+
+client = MongoClient("mongodb://db:27017")
+db = client.Accendo
+fs = GridFS(db)
+images = db["images"]
 
 # define Gram Matrix
-
-
 class GramMatrix(nn.Module):
     def forward(self, y):
         (b, ch, h, w) = y.size()
@@ -18,8 +24,6 @@ class GramMatrix(nn.Module):
         return gram
 
 # define Co-Match layer
-
-
 class CoMatch(nn.Module):
     """ Co-Match Layer for tuning the 
     feature map with target Gram Matrix
@@ -84,8 +88,6 @@ class UpSampleConvLayer(nn.Module):
         return out
 
 # pre activation layers
-
-
 class Bottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=nn.BatchNorm2d):
         super(Bottleneck, self).__init__()
@@ -136,8 +138,6 @@ class UpSampleBottleneck(nn.Module):
         return self.residual_layer(x) + self.conv_block(x)
 
 # the style transfer model
-
-
 class Model(nn.Module):
     def __init__(self, input_nc=3, output_nc=3, ngf=64, norm_layer=nn.InstanceNorm2d, n_blocks=6, gpu_ids=[]):
         super(Model, self).__init__()
@@ -182,7 +182,7 @@ class Model(nn.Module):
 
 
 def load_rgb_image(filename, size=None, scale=None, keep_asp=False):
-    img = Image.open(filename).convert('RGB')
+    img = Image.open(fs.get(filename)).convert('RGB')
     if size is not None:
         if keep_asp:
             size2 = int(size * 1.0 / img.size[0] * img.size[1])
@@ -205,14 +205,14 @@ def save_rgb_image(tensor, filename, cuda=False):
         img = tensor.clone().clamp(0, 255).numpy()
     img = img.transpose(1, 2, 0).astype('uint8')
     img = Image.fromarray(img)
-    img.save(filename)
-
+    file = io.BytesIO()
+    img.save(file, format="JPEG")
+    return fs.put(file.getvalue())
 
 def save_bgr_image(tensor, filename, cuda=False):
     (b, g, r) = torch.chunk(tensor, 3)
     tensor = torch.cat((r, g, b))
-    save_rgb_image(tensor, filename, cuda)
-
+    return save_rgb_image(tensor, filename, cuda)
 
 def preprocess_batch(batch):
     batch = batch.transpose(0, 1)
@@ -221,8 +221,8 @@ def preprocess_batch(batch):
     batch = batch.transpose(0, 1)
     return batch
 
-
 # for testing the model
+'''
 content_image = load_rgb_image(
     './../images/hong_kong.jpg', size=1024, keep_asp=True).unsqueeze(0)
 style = load_rgb_image('./../images/wave.jpg', size=512).unsqueeze(0)
@@ -237,3 +237,28 @@ content_image = Variable(preprocess_batch(content_image))
 style_model.set_target(style_v)
 output = style_model(content_image)
 save_bgr_image(output.data[0], './../images/output.jpg', False)
+'''
+
+def process(content_img_path, style_img_path):
+    content_image = load_rgb_image(
+        content_img_path,
+        size=768,
+        keep_asp=True
+    ).unsqueeze(0)
+    
+    style = load_rgb_image(
+        style_img_path, 
+        size=512).unsqueeze(0)
+    
+    style = preprocess_batch(style)
+
+    style_model = Model(ngf=128)
+    style_model.load_state_dict(torch.load(
+        './models/pretrained/style_transfer.pt'), False)
+
+    style_v = Variable(style)
+    content_image = Variable(preprocess_batch(content_image))
+    style_model.set_target(style_v)
+    output = style_model(content_image)
+    file_id = save_bgr_image(output.data[0], 'output.jpg', False)
+    return file_id
