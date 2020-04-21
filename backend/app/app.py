@@ -39,8 +39,42 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def login_success():
+    return jsonify({
+            "status": 200,
+            "msg": "Login Successful!"
+        }
+
 
 class Register(Resource):
+    def post(self):
+        data = request.form
+        username = data["username"]
+        password = data["password"]
+        email = data["email"]
+
+        if user_exists(username):
+            return jsonify({
+                "status": 301,
+                "msg": "Unknown username"
+            })
+
+        if email_exists(email):
+            return jsonify({
+                "status": 301,
+                "msg": "Unknown Email email"
+            })
+
+        hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
+        users.insert_one({
+            "username": username,
+            "password": hashed_pw,
+            "email": email
+        })
+
+        )
+
+class Login(Resouce):
     def post(self):
         data = request.form
         username = data["username"]
@@ -66,11 +100,8 @@ class Register(Resource):
             "email": email
         })
 
-        return jsonify({
-            "status": 200,
-            "msg": "User registered"
-        })
-
+        login_success()
+        )
 
 class Stylize(Resource):
     def post(self):
