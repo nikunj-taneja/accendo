@@ -39,12 +39,6 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def login_success():
-    return jsonify({
-            "status": 200,
-            "msg": "Login Successful!"
-        }
-
 
 class Register(Resource):
     def post(self):
@@ -56,13 +50,13 @@ class Register(Resource):
         if user_exists(username):
             return jsonify({
                 "status": 301,
-                "msg": "Unknown username"
+                "msg": "Invalid username"
             })
 
         if email_exists(email):
             return jsonify({
                 "status": 301,
-                "msg": "Unknown Email email"
+                "msg": "Invalid email"
             })
 
         hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
@@ -72,33 +66,33 @@ class Register(Resource):
             "email": email
         })
 
-        )
+        return jsonify({
+            "status": 200,
+            "msg": "User registered"
+        })
 
-class Login(Resouce):
+class Login(Resource):
     def post(self):
         data = request.form
         username = data["username"]
         password = data["password"]
 
-        if user_exists(username):
-            return jsonify({
-                "status": 301,
-                "msg": "Invalid username"
-            })
-
         hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
-        user = users.find_one({"username": username, "password": hashed_pw})
-        if user:
+        check = users.find_one({
+            "username": username,
+            "password": hashed_pw,
+        })
+
+        if check:
             return jsonify({
-            "status": 200,
-            "msg": "Login Successful!"
-        }
+                "status": 200,
+                "msg": "User registered"
+            })
         else:
             return jsonify({
-            "status": 301,
-            "msg": "Login Unsuccessful!"
-        }
-    )
+                "status": 2
+            })
+
 
 class Stylize(Resource):
     def post(self):
