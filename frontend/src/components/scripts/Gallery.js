@@ -40,7 +40,7 @@ class Gallery extends React.Component {
         {imageList.map((link, index) => {
           return (
             <div className="grid-img" key={index}>
-              <img alt={link} src={link} style={{ width: 300 }} />
+              <img src={link} style={{ width: 300 }} />
             </div>
           );
         })}
