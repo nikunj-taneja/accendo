@@ -26,7 +26,7 @@ class Login extends React.Component {
           </Form.Group>
         </Form>
         <div className="text-right">
-          <Button size="lg" class="primaryButton ">
+          <Button size="lg" className="primaryButton ">
             Login
           </Button>
         </div>

@@ -18,7 +18,7 @@ class App extends React.Component {
 
         <Container className="main-body">
           <Switch>
-            <Route path="/" exact="true">
+            <Route path="/" exact={true}>
               <UserPage />
             </Route>
             <Route path="/gallery">

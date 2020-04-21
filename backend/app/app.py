@@ -7,7 +7,7 @@ import style_transfer
 import supersize_gan
 from PIL import Image
 from werkzeug.utils import secure_filename
-import time 
+import time
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -20,11 +20,13 @@ fs = GridFS(db)
 users = db["users"]
 images = db["images"]
 
+
 def user_exists(username):
     if users.find({"username": username}).count() == 0:
         return False
     else:
         return True
+
 
 def email_exists(email):
     if users.find({"email": email}).count() == 0:
@@ -32,9 +34,11 @@ def email_exists(email):
     else:
         return True
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 class Register(Resource):
     def post(self):
@@ -54,7 +58,7 @@ class Register(Resource):
                 "status": 301,
                 "msg": "Invalid email"
             })
-        
+
         hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
         users.insert_one({
             "username": username,
@@ -67,11 +71,12 @@ class Register(Resource):
             "msg": "User registered"
         })
 
+
 class Stylize(Resource):
     def post(self):
         start = time.time()
         username = request.form['username']
-        if 'content_img' in request.files: 
+        if 'content_img' in request.files:
             content_img = request.files['content_img']
             if content_img.filename == '':
                 # TODO
@@ -79,9 +84,10 @@ class Stylize(Resource):
             if content_img and allowed_file(content_img.filename):
                 content_img_id = fs.put(content_img)
                 # client.save_file(filename, content_img)
-                images.insert_one({'username': username, 'img': content_img_id})
+                images.insert_one(
+                    {'username': username, 'img': content_img_id})
 
-        if 'style_img' in request.files: 
+        if 'style_img' in request.files:
             style_img = request.files['style_img']
             if style_img.filename == '':
                 # TODO
@@ -99,13 +105,14 @@ class Stylize(Resource):
         stylized_img = style_transfer.process(content_img_id, style_img_id)
         print('Styling time:', time.time() - style_time)
         print('Total time:', time.time() - start)
-        return send_file(fs.get(stylized_img), attachment_filename=(str(stylized_img) +'.jpg'))
+        return send_file(fs.get(stylized_img), attachment_filename=(str(stylized_img) + '.jpg'))
+
 
 class Supersize(Resource):
     def post(self):
         start = time.time()
         username = request.form['username']
-        if 'img' in request.files: 
+        if 'img' in request.files:
             img = request.files['img']
             if img.filename == '':
                 # TODO
@@ -119,16 +126,18 @@ class Supersize(Resource):
                 "status": 301,
                 "msg": "Invalid input"
             })
-        
+
         supersize = time.time()
         supersized_img = supersize_gan.process(img_id)
         print('Styling time:', time.time() - supersize)
         print('Total time:', time.time() - start)
-        return send_file(fs.get(supersized_img), attachment_filename=(str(supersized_img) +'.jpg'))
+        return send_file(fs.get(supersized_img), attachment_filename=(str(supersized_img) + '.jpg'))
+
 
 api.add_resource(Register, "/register")
 api.add_resource(Stylize, "/stylize")
 api.add_resource(Supersize, "/supersize")
+
 
 @app.route('/')
 def testing():
@@ -156,6 +165,7 @@ def testing():
       <input type=submit value=Upload>
     </form>
     '''
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
