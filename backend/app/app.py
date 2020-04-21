@@ -39,6 +39,12 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def login_success():
+    return jsonify({
+            "status": 200,
+            "msg": "Login Successful!"
+        }
+
 
 class Register(Resource):
     def post(self):
@@ -50,13 +56,13 @@ class Register(Resource):
         if user_exists(username):
             return jsonify({
                 "status": 301,
-                "msg": "Invalid username"
+                "msg": "Unknown username"
             })
 
         if email_exists(email):
             return jsonify({
                 "status": 301,
-                "msg": "Invalid email"
+                "msg": "Unknown Email email"
             })
 
         hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
@@ -66,11 +72,33 @@ class Register(Resource):
             "email": email
         })
 
-        return jsonify({
-            "status": 200,
-            "msg": "User registered"
-        })
+        )
 
+class Login(Resouce):
+    def post(self):
+        data = request.form
+        username = data["username"]
+        password = data["password"]
+
+        if user_exists(username):
+            return jsonify({
+                "status": 301,
+                "msg": "Invalid username"
+            })
+
+        hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
+        user = users.find_one({"username": username, "password": hashed_pw})
+        if user:
+            return jsonify({
+            "status": 200,
+            "msg": "Login Successful!"
+        }
+        else:
+            return jsonify({
+            "status": 301,
+            "msg": "Login Unsuccessful!"
+        }
+    )
 
 class Stylize(Resource):
     def post(self):
@@ -135,6 +163,7 @@ class Supersize(Resource):
 
 
 api.add_resource(Register, "/register")
+api.add_resource(Login, "/login")
 api.add_resource(Stylize, "/stylize")
 api.add_resource(Supersize, "/supersize")
 
