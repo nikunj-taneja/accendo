@@ -3,8 +3,8 @@ from flask_restful import Api, Resource
 from pymongo import MongoClient
 from gridfs import GridFS
 import bcrypt
-import style_transfer
-import supersize_gan
+# import style_transfer
+# import supersize_gan
 from PIL import Image
 from werkzeug.utils import secure_filename
 import time
@@ -173,6 +173,12 @@ def testing():
       Username: <input type=text name=username id=username>
       Password: <input type=password name=password id=password>
       Email: <input type=email name=email id=email>
+      <br>
+      <input type=submit value=Submit>
+    </form>
+    <form method=POST action='/login' enctype=multipart/form-data>
+      Username: <input type=text name=username id=username>
+      Password: <input type=password name=password id=password>
       <br>
       <input type=submit value=Submit>
     </form>
