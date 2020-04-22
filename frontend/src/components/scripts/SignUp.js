@@ -2,11 +2,13 @@ import React from "react";
 
 import { Form, Button } from "react-bootstrap";
 
-import axios from "axios";
+import AuthContext from "./AuthContext";
 
 import "../styles/SignUp.css";
 
 class SignUp extends React.Component {
+  static contextType = AuthContext;
+
   constructor() {
     super();
     this.state = {
@@ -61,20 +63,12 @@ class SignUp extends React.Component {
     }
   };
 
-  TrySignUp = (event) => {
-    event.preventDefault();
-    var data = new FormData();
-    data.set("username", this.state.username);
-    data.set("email", this.state.email);
-    data.set("password", this.state.password);
-    axios({
-      method: "post",
-      url: "/register",
-      data: data,
-      headers: { "Content-Type": "multipart/form-data" },
-    }).then(function (response) {
-      console.log(response);
-    });
+  TrySignUp = () => {
+    this.context.register(
+      this.state.username,
+      this.state.email,
+      this.state.password
+    );
   };
 
   render() {
@@ -137,7 +131,7 @@ class SignUp extends React.Component {
           </Form.Control.Feedback>
         </Form.Group>
         <div className="text-left">
-          <Button type="submit" size="lg" onClick={this.TrySignUp}>
+          <Button size="lg" onClick={this.TrySignUp}>
             Submit
           </Button>
         </div>

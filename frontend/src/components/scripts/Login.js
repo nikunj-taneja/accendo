@@ -1,9 +1,12 @@
 import React from "react";
-import axios from "axios";
+
+import AuthContext from "./AuthContext";
 
 import { Button, Form } from "react-bootstrap";
 
 class Login extends React.Component {
+  static contextType = AuthContext;
+
   constructor() {
     super();
     this.state = {
@@ -22,18 +25,7 @@ class Login extends React.Component {
   };
 
   handleSubmit = () => {
-    var data = new FormData();
-    data.set("username", this.state.username);
-    data.set("password", this.state.password);
-
-    axios({
-      method: "post",
-      url: "/login",
-      data: data,
-      headers: { "Content-Type": "multipart/form-data" },
-    }).then(function (response) {
-      console.log(response);
-    });
+    this.context.login(this.state.username, this.state.password);
   };
 
   render() {
