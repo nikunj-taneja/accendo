@@ -78,7 +78,7 @@ class AppProvider extends React.Component {
         }}
         active={this.state.isWaiting}
         spinner
-        text="working..."
+        text="Working..."
       >
         <AuthContext.Provider
           value={{

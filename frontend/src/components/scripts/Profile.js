@@ -16,6 +16,13 @@ class Profile extends React.Component {
     file_id: null,
   };
 
+  reset = () => {
+    this.setState({
+      uploaded: false,
+      file_id: null,
+    });
+  };
+
   handleSubmit = async (file) => {
     var formdata = new FormData();
     formdata.append("image", file, file.fileName);
@@ -34,11 +41,12 @@ class Profile extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <div className="bodyText">
         <h5 className="pb-5 pt-3">Hi, {this.context.username}!</h5>
         {this.state.uploaded ? (
-          <ImagePage file_id={this.state.file_id} />
+          <ImagePage file_id={this.state.file_id} reset={this.reset} />
         ) : (
           <Upload handleSubmit={this.handleSubmit} />
         )}
