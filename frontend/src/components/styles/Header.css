@@ -8,9 +8,12 @@
 .navbar-brand {
   font-family: "Dancing Script";
   font-weight: 400;
-  color: #40d47e !important;
   font-size: 2em !important;
   width: 150px;
+}
+
+.navbar-brand a {
+  color: #40d47e !important;
 }
 
 .nav-item {

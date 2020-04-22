@@ -15,8 +15,8 @@ class Header extends React.Component {
     console.log("render");
     return (
       <Navbar className="header shadow-sm" expand="lg">
-        <Navbar.Brand href="/" className="header-name">
-          Accendo
+        <Navbar.Brand className="header-name">
+          <Link to="/">Accendo</Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse>
