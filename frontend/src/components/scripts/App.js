@@ -23,18 +23,12 @@ class App extends React.Component {
 
         <Container className="main-body">
           <Switch>
-            <Route path="/" exact={true}>
+            <Route path="/" exact>
               {this.context.isAuth ? <ProfileWrapper /> : <UserPage />}
             </Route>
-            <Route path="/gallery">
-              <Gallery />
-            </Route>
-            <Route path="/profile">
-              <ProfileWrapper />
-            </Route>
-            <Route path="/signup">
-              <SignUp />
-            </Route>
+            <Route path="/gallery" exact component={Gallery} />
+            <Route path="/profile" exact component={ProfileWrapper} />
+            <Route path="/signup" exact component={SignUp} />
           </Switch>
         </Container>
       </Router>
