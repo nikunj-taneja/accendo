@@ -27,7 +27,11 @@ class AppProvider extends React.Component {
     });
 
     if (response.data.status == "200") {
-      this.setState({ isAuth: true, isWaiting: false, username: username });
+      this.setState({
+        isAuth: true,
+        isWaiting: false,
+        username: username,
+      });
       console.log("Logged In!");
     } else {
       this.setState({ isWaiting: false });
@@ -64,7 +68,7 @@ class AppProvider extends React.Component {
     return (
       <AuthContext.Provider
         value={{
-          userData: this.state,
+          ...this.state,
           login: this.login,
           register: this.register,
           logout: this.logout,
