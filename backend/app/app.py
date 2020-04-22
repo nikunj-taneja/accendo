@@ -3,8 +3,8 @@ from flask_restful import Api, Resource
 from pymongo import MongoClient
 from gridfs import GridFS
 import bcrypt
-import style_transfer
-import supersize_gan
+# import style_transfer
+# import supersize_gan
 from PIL import Image
 from werkzeug.utils import secure_filename
 import time
@@ -69,6 +69,7 @@ class Register(Resource):
             'status': 200,
             'msg': 'User registered'
         })
+
 
 class Login(Resource):
     def post(self):

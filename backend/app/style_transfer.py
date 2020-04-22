@@ -15,6 +15,8 @@ fs = GridFS(db)
 images = db["images"]
 
 # define Gram Matrix
+
+
 class GramMatrix(nn.Module):
     def forward(self, y):
         (b, ch, h, w) = y.size()
@@ -24,6 +26,8 @@ class GramMatrix(nn.Module):
         return gram
 
 # define Co-Match layer
+
+
 class CoMatch(nn.Module):
     """ Co-Match Layer for tuning the 
     feature map with target Gram Matrix
@@ -85,6 +89,8 @@ class UpSampleConvLayer(nn.Module):
         return out
 
 # pre activation layers
+
+
 class Bottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=nn.BatchNorm2d):
         super(Bottleneck, self).__init__()
@@ -134,6 +140,8 @@ class UpSampleBottleneck(nn.Module):
         return self.residual_layer(x) + self.conv_block(x)
 
 # the style transfer model
+
+
 class Model(nn.Module):
     def __init__(self, input_nc=3, output_nc=3, ngf=64, norm_layer=nn.InstanceNorm2d, n_blocks=6, gpu_ids=[]):
         super(Model, self).__init__()
@@ -203,10 +211,12 @@ def save_rgb_image(tensor, filename, cuda=False):
     img.save(file, format="JPEG")
     return fs.put(file.getvalue())
 
+
 def save_bgr_image(tensor, filename, cuda=False):
     (b, g, r) = torch.chunk(tensor, 3)
     tensor = torch.cat((r, g, b))
     return save_rgb_image(tensor, filename, cuda)
+
 
 def preprocess_batch(batch):
     batch = batch.transpose(0, 1)
@@ -221,11 +231,11 @@ def process(content_img_path, style_img_path):
         size=768,
         keep_asp=True
     ).unsqueeze(0)
-    
+
     style = load_rgb_image(
-        style_img_path, 
+        style_img_path,
         size=512).unsqueeze(0)
-    
+
     style = preprocess_batch(style)
 
     style_model = Model(ngf=128)
