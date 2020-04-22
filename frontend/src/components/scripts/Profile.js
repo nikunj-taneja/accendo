@@ -57,7 +57,10 @@ class Profile extends React.Component {
                       this.state.loading ? (
                         <Spinner animation="grow" />
                       ) : (
-                        <img src={this.state.loadedFile} class="thumbImg"></img>
+                        <img
+                          src={this.state.loadedFile}
+                          className="thumbImg"
+                        ></img>
                       )
                     ) : (
                       ""
