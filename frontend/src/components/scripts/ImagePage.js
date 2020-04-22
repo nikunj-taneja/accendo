@@ -5,7 +5,10 @@ class ImagePage extends React.Component {
   render() {
     console.log(`http:localhost:5000/${this.props.file_id}`);
     return (
-      <Container className="text-center">
+      <Container
+        style={{ background: "#141e30", padding: 20, borderRadius: 20 }}
+        className="text-center"
+      >
         <h1>Image Successfully Uploaded!</h1>
         <img
           style={{ maxWidth: 500 }}
