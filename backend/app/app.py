@@ -17,9 +17,8 @@ api = Api(app)
 client = MongoClient("mongodb://db:27017")
 db = client.accendo
 fs = GridFS(db)
-users = db["users"]
-images = db["images"]
-
+users = db.users
+images = db.images
 
 def user_exists(username):
     if users.find({"username": username}).count() == 0:
@@ -43,57 +42,62 @@ def allowed_file(filename):
 class Register(Resource):
     def post(self):
         data = request.form
-        username = data["username"]
-        password = data["password"]
-        email = data["email"]
+        username = data['username']
+        password = data['password']
+        email = data['email']
 
         if user_exists(username):
             return jsonify({
-                "status": 301,
-                "msg": "Invalid username"
+                'status': 301,
+                'msg': 'Invalid username'
             })
 
         if email_exists(email):
             return jsonify({
-                "status": 301,
-                "msg": "Invalid email"
+                'status': 301,
+                'msg': 'Invalid email'
             })
 
-        hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
+        hashed_pw = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
         users.insert_one({
-            "username": username,
-            "password": hashed_pw,
-            "email": email
+            'username': username,
+            'password': hashed_pw,
+            'email': email
         })
 
         return jsonify({
-            "status": 200,
-            "msg": "User registered"
+            'status': 200,
+            'msg': 'User registered'
         })
 
 
 class Login(Resource):
     def post(self):
         data = request.form
-        username = data["username"]
-        password = data["password"]
+        username = data['username']
+        password = data['password']
 
-        hashed_pw = bcrypt.hashpw(password.encode("utf8"), bcrypt.gensalt())
-        check = users.find_one({
-            "username": username,
-            "password": hashed_pw,
+        user = users.find_one({
+            'username': username,
         })
-
-        if check:
-            return jsonify({
-                "status": 200,
-                "msg": "User registered"
-            })
+        
+        if user:
+            hashed_pw = user['password']
+            if bcrypt.checkpw(password.encode('utf8'), hashed_pw):
+                return jsonify({
+                    'status': 200,
+                    'msg': 'Login successful'
+                })
+            else:
+                return jsonify({
+                    'status': 301,
+                    'msg': 'Invalid password'
+                })
         else:
             return jsonify({
-                "status": 2
+                'status': 301,
+                'msg': 'Invalid username'
             })
-
 
 class Stylize(Resource):
     def post(self):
@@ -176,6 +180,7 @@ def testing():
       <br>
       <input type=submit value=Submit>
     </form>
+    <h1>Login</h1>
     <form method=POST action='/login' enctype=multipart/form-data>
       Username: <input type=text name=username id=username>
       Password: <input type=password name=password id=password>

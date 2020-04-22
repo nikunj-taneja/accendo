@@ -57,8 +57,6 @@ class CoMatch(nn.Module):
         return self.__class__.__name__ + '(' + 'N x ' + str(self.C) + ')'
 
 # some basic layers
-
-
 class ConvLayer(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride):
         super(ConvLayer, self).__init__()
@@ -70,7 +68,6 @@ class ConvLayer(nn.Module):
         out = self.reflection_pad(x)
         out = self.conv2d(out)
         return out
-
 
 class UpSampleConvLayer(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride, upsample=None):
@@ -120,7 +117,6 @@ class Bottleneck(nn.Module):
         else:
             residual = x
         return residual + self.conv_block(x)
-
 
 class UpSampleBottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=2, norm_layer=nn.BatchNorm2d):
@@ -188,7 +184,6 @@ class Model(nn.Module):
     def forward(self, input):
         return self.model(input)
 
-
 def load_rgb_image(filename, size=None, scale=None, keep_asp=False):
     img = Image.open(fs.get(filename)).convert('RGB')
     if size is not None:
@@ -204,7 +199,6 @@ def load_rgb_image(filename, size=None, scale=None, keep_asp=False):
     img = np.array(img).transpose(2, 0, 1)
     img = torch.from_numpy(img).float()
     return img
-
 
 def save_rgb_image(tensor, filename, cuda=False):
     if cuda:
@@ -231,30 +225,10 @@ def preprocess_batch(batch):
     batch = batch.transpose(0, 1)
     return batch
 
-
-# for testing the model
-'''
-content_image = load_rgb_image(
-    './../images/hong_kong.jpg', size=1024, keep_asp=True).unsqueeze(0)
-style = load_rgb_image('./../images/wave.jpg', size=512).unsqueeze(0)
-style = preprocess_batch(style)
-
-style_model = Model(ngf=128)
-style_model.load_state_dict(torch.load(
-    './pretrained/style_transfer.pt'), False)
-
-style_v = Variable(style)
-content_image = Variable(preprocess_batch(content_image))
-style_model.set_target(style_v)
-output = style_model(content_image)
-save_bgr_image(output.data[0], './../images/output.jpg', False)
-'''
-
-
 def process(content_img_path, style_img_path):
     content_image = load_rgb_image(
         content_img_path,
-        size=512,
+        size=768,
         keep_asp=True
     ).unsqueeze(0)
 
@@ -267,7 +241,6 @@ def process(content_img_path, style_img_path):
     style_model = Model(ngf=128)
     style_model.load_state_dict(torch.load(
         './models/pretrained/style_transfer.pt'), False)
-
     style_v = Variable(style)
     content_image = Variable(preprocess_batch(content_image))
     style_model.set_target(style_v)
