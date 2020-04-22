@@ -171,7 +171,7 @@ class Stylize(Resource):
 class Supersize(Resource):
     def post(self):
         # start = time.time()
-        img_id = request.form['file_id']
+        img_id = ObjectId(request.form['file_id'])
         # if 'image' in request.files:
         #     img = fs.get(ObjectId(file_id))
         #     if img.filename == '':
