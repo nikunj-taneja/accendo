@@ -43,6 +43,7 @@ body {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:visited {
-  background-color: #40d47e !important;
+  background-color: #28b161 !important;
+  color: #eee !important;
   border: none !important;
 }
