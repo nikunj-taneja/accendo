@@ -5,10 +5,11 @@ import AuthContext from "./AuthContext";
 import { Container, Button, Spinner } from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import "../styles/Profile.css";
+import axios from "axios";
 
 class Profile extends React.Component {
   state = {
-    fileObj: null,
+    file: null,
     loading: false,
     selected: false,
     loadedFile: null,
@@ -34,6 +35,21 @@ class Profile extends React.Component {
       });
     });
     reader.readAsDataURL(file);
+  };
+
+  handleSubmit = async () => {
+    var formdata = new FormData();
+    formdata.append("image", this.state.file, this.state.file.fileName);
+    formdata.set("username", this.context.username);
+
+    const response = await axios.post("/upload", formdata, {
+      headers: {
+        accept: "application/json",
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log(response);
   };
 
   render() {
@@ -68,6 +84,9 @@ class Profile extends React.Component {
               </section>
             )}
           </Dropzone>
+          <Button size="lg" block className="mt-3" onClick={this.handleSubmit}>
+            Upload
+          </Button>
           <Button size="lg" block className="mt-3">
             Supersize
           </Button>
