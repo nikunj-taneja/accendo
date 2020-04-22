@@ -22,6 +22,7 @@ class SignUp extends React.Component {
       username: "",
       password: "",
       confirm_pass: "",
+      valid: false,
     };
   }
 
@@ -61,10 +62,27 @@ class SignUp extends React.Component {
       default:
         break;
     }
+
+    var valid = true;
+    const errVals = Object.values(errors);
+    for (var i = 0; i < errVals.length; i++) {
+      if (errVals[i] !== "") {
+        valid = false;
+      }
+    }
+    this.setState({
+      valid: valid,
+    });
   };
 
   TrySignUp = (event) => {
     event.preventDefault();
+
+    if (!this.state.valid) {
+      console.log("please fix errors first");
+      return;
+    }
+
     this.context.register(
       this.state.username,
       this.state.email,
