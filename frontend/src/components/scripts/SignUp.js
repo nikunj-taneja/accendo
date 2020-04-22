@@ -81,7 +81,7 @@ class SignUp extends React.Component {
     return (
       <Form>
         <Form.Group>
-          <Form.Label className="bodyText">Name</Form.Label>
+          <Form.Label className="bodyText">Username</Form.Label>
           <Form.Control
             name="username"
             size="lg"

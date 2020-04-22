@@ -71,6 +71,7 @@ class Register(Resource):
             "msg": "User registered"
         })
 
+
 class Login(Resource):
     def post(self):
         data = request.form
