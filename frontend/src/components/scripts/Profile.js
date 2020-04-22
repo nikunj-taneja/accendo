@@ -21,8 +21,6 @@ class Profile extends React.Component {
 
     const file = acceptedFiles[0];
 
-    console.log(file);
-
     this.setState({
       file: file,
       loading: true,
