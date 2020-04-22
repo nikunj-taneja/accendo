@@ -3,11 +3,12 @@ from flask_restful import Api, Resource
 from pymongo import MongoClient
 from gridfs import GridFS
 import bcrypt
-# import style_transfer
-# import supersize_gan
+import style_transfer
+import supersize_gan
 from PIL import Image
 from werkzeug.utils import secure_filename
 import time
+from bson.objectid import ObjectId
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -99,6 +100,47 @@ class Login(Resource):
                 'msg': 'Invalid username'
             })
 
+
+class Upload(Resource):
+    def post(self):
+        if 'image' in request.files:
+            username = request.form['username']
+            image_file = request.files['image']
+            if image_file.filename == '':
+                return jsonify({
+                'status': 301,
+                'msg': 'Empty file'
+                })
+            if image_file and allowed_file(image_file.filename):
+                file_id = fs.put(image_file)
+                images.insert_one({'username' : username, 'file_id' : file_id})
+                return jsonify({
+                'status': 200,
+                'msg': 'File uploaded successfully',
+                'file_id': str(file_id)
+                })
+            else:
+                return jsonify({
+                'status': 301,
+                'msg': 'Invalid file'
+                })
+        else:
+            return jsonify({
+            'status': 301,
+            'msg': 'No file in request'
+            })
+
+@app.route('/file/<file_id>')
+def get_file(file_id):
+    if fs.exists(ObjectId(file_id)):
+        return send_file(fs.get(ObjectId(file_id)), attachment_filename = str(file_id) + '.jpg')
+    else:
+        return jsonify({
+            'status': 404,
+            'msg': 'File not found'
+        })
+
+
 class Stylize(Resource):
     def post(self):
         start = time.time()
@@ -163,6 +205,7 @@ class Supersize(Resource):
 
 api.add_resource(Register, "/register")
 api.add_resource(Login, "/login")
+api.add_resource(Upload, '/upload')
 api.add_resource(Stylize, "/stylize")
 api.add_resource(Supersize, "/supersize")
 
@@ -194,14 +237,13 @@ def testing():
       <input type=file name=style_img>
       <input type=submit value=Upload>
     </form>
-    <h1>Supersize</h1>
-     <form action='/supersize' method=POST enctype=multipart/form-data>
+    <h1>Upload</h1>
+     <form action='/upload' method=POST enctype=multipart/form-data>
       <input type=text name=username>
-      <input type=file name=img>
+      <input type=file name=image>
       <input type=submit value=Upload>
     </form>
     '''
 
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host='0.0.0.0')
