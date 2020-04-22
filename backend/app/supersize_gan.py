@@ -130,7 +130,7 @@ class UpsampleBLock(nn.Module):
         x = self.prelu(x)
         return x
     
-    
+
 def process(img_id):
     UPSCALE_FACTOR = 4
     TEST_MODE = 'CPU'
