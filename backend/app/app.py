@@ -22,23 +22,14 @@ users = db.users
 images = db.images
 
 def user_exists(username):
-    if users.find({"username": username}).count() == 0:
-        return False
-    else:
-        return True
-
+    return users.find({"username": username}).count() != 0
 
 def email_exists(email):
-    if users.find({"email": email}).count() == 0:
-        return False
-    else:
-        return True
-
+    return users.find({"email": email}).count() != 0
 
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 class Register(Resource):
     def post(self):
@@ -108,26 +99,26 @@ class Upload(Resource):
             image_file = request.files['image']
             if image_file.filename == '':
                 return jsonify({
-                'status': 301,
-                'msg': 'Empty file'
+                    'status': 301,
+                    'msg': 'Empty file'
                 })
             if image_file and allowed_file(image_file.filename):
                 file_id = fs.put(image_file)
                 images.insert_one({'username' : username, 'file_id' : file_id})
                 return jsonify({
-                'status': 200,
-                'msg': 'File uploaded successfully',
-                'file_id': str(file_id)
+                    'status': 200,
+                    'msg': 'File uploaded successfully',
+                    'file_id': str(file_id)
                 })
             else:
                 return jsonify({
-                'status': 301,
-                'msg': 'Invalid file'
+                    'status': 301,
+                    'msg': 'Invalid file'
                 })
         else:
             return jsonify({
-            'status': 301,
-            'msg': 'No file in request'
+                'status': 301,
+                'msg': 'No file in request'
             })
 
 @app.route('/file/<file_id>')
@@ -179,36 +170,38 @@ class Stylize(Resource):
 
 class Supersize(Resource):
     def post(self):
-        start = time.time()
-        username = request.form['username']
-        if 'img' in request.files:
-            img = request.files['img']
-            if img.filename == '':
-                # TODO
-                return 0
-            if img and allowed_file(img.filename):
-                img_id = fs.put(img)
-                # client.save_file(filename, content_img)
-                images.insert_one({'username': username, 'img': img_id})
-        else:
-            return jsonify({
-                "status": 301,
-                "msg": "Invalid input"
-            })
+        # start = time.time()
+        img_id = request.form['file_id']
+        # if 'image' in request.files:
+        #     img = fs.get(ObjectId(file_id))
+        #     if img.filename == '':
+        #         # TODO
+        #         return 0
+        #     if img and allowed_file(img.filename):
+        #         img_id = fs.put(img)
+        #         # client.save_file(filename, content_img)
+        #         images.insert_one({'username': username, 'img': img_id})
+        # else:
+        #     return jsonify({
+        #         "status": 301,
+        #         "msg": "Invalid input"
+        #     })
 
-        supersize = time.time()
-        supersized_img = supersize_gan.process(img_id)
-        print('Styling time:', time.time() - supersize)
-        print('Total time:', time.time() - start)
-        return send_file(fs.get(supersized_img), attachment_filename=(str(supersized_img) + '.jpg'))
+        # supersize = time.time()
+        supersized_img_id = supersize_gan.process(img_id)
+        # print('Styling time:', time.time() - supersize)
+        # print('Total time:', time.time() - start)
+        return jsonify({
+            'status': 200,
+            'msg': 'Image supersized successfully.',
+            'file_id': str(supersized_img_id)
+        })
 
-
-api.add_resource(Register, "/register")
-api.add_resource(Login, "/login")
+api.add_resource(Register, '/register')
+api.add_resource(Login, '/login')
 api.add_resource(Upload, '/upload')
-api.add_resource(Stylize, "/stylize")
-api.add_resource(Supersize, "/supersize")
-
+api.add_resource(Stylize, '/stylize')
+api.add_resource(Supersize, '/supersize')
 
 @app.route('/')
 def testing():
