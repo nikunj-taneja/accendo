@@ -63,7 +63,8 @@ class SignUp extends React.Component {
     }
   };
 
-  TrySignUp = () => {
+  TrySignUp = (event) => {
+    event.preventDefault();
     this.context.register(
       this.state.username,
       this.state.email,
@@ -73,7 +74,7 @@ class SignUp extends React.Component {
 
   render() {
     return (
-      <Form>
+      <Form onSubmit={this.TrySignUp}>
         <Form.Group>
           <Form.Label className="bodyText">Username</Form.Label>
           <Form.Control
@@ -131,7 +132,7 @@ class SignUp extends React.Component {
           </Form.Control.Feedback>
         </Form.Group>
         <div className="text-left">
-          <Button size="lg" onClick={this.TrySignUp}>
+          <Button type="submit" size="lg">
             Submit
           </Button>
         </div>

@@ -24,14 +24,15 @@ class Login extends React.Component {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (event) => {
+    event.preventDefault();
     this.context.login(this.state.username, this.state.password);
   };
 
   render() {
     return (
       <div>
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
           <Form.Group>
             <Form.Label className="bodyText">Username</Form.Label>
             <Form.Control
@@ -52,16 +53,12 @@ class Login extends React.Component {
               onChange={this.handleChange}
             ></Form.Control>
           </Form.Group>
+          <div className="text-right">
+            <Button size="lg" type="submit" className="primaryButton ">
+              Login
+            </Button>
+          </div>
         </Form>
-        <div className="text-right">
-          <Button
-            onClick={this.handleSubmit}
-            size="lg"
-            className="primaryButton "
-          >
-            Login
-          </Button>
-        </div>
       </div>
     );
   }
