@@ -10,7 +10,7 @@ class Profile extends React.Component {
   static contextType = AuthContext;
   render() {
     return (
-      <div className="userInfo">
+      <div className="bodyText">
         <h5 className="pb-5 pt-5">Username: {this.context.username}</h5>
 
         <Dropzone
@@ -20,9 +20,7 @@ class Profile extends React.Component {
           {({ getRootProps, getInputProps }) => (
             <div {...getRootProps({ className: "dropzone" })}>
               <input {...getInputProps()} />
-              <p className="bodyText">
-                Drag 'n' drop some files here, or click to select files
-              </p>
+              <p>Drag 'n' drop some files here, or click to select files</p>
             </div>
           )}
         </Dropzone>
