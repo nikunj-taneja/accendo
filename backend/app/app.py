@@ -134,43 +134,43 @@ def get_file(file_id):
 
 class Stylize(Resource):
     def post(self):
-        start = time.time()
+        # start = time.time()
         username = request.form['username']
-        if 'content_img' in request.files:
-            content_img = request.files['content_img']
-            if content_img.filename == '':
-                # TODO
-                return 0
-            if content_img and allowed_file(content_img.filename):
-                content_img_id = fs.put(content_img)
-                # client.save_file(filename, content_img)
-                images.insert_one(
-                    {'username': username, 'img': content_img_id})
-
+        content_img_id = ObjectId(request.form['file_id'])
         if 'style_img' in request.files:
             style_img = request.files['style_img']
             if style_img.filename == '':
-                # TODO
-                return 0
+                return jsonify({
+                    'status': 301,
+                    'msg': 'Invalid style image'
+                })
             if style_img and allowed_file(style_img.filename):
                 style_img_id = fs.put(style_img)
                 # client.save_file(filename, content_img)
-                images.insert_one({'username': username, 'img': style_img_id})
+                images.insert_one({
+                    'username': username,
+                    'img': style_img_id
+                })
         else:
             return jsonify({
                 "status": 301,
-                "msg": "Invalid input"
+                "msg": "Invalid style image"
             })
-        style_time = time.time()
-        stylized_img = style_transfer.process(content_img_id, style_img_id)
-        print('Styling time:', time.time() - style_time)
-        print('Total time:', time.time() - start)
-        return send_file(fs.get(stylized_img), attachment_filename=(str(stylized_img) + '.jpg'))
+        # style_time = time.time()
+        stylized_img_id = style_transfer.process(content_img_id, style_img_id)
+        # print('Styling time:', time.time() - style_time)
+        # print('Total time:', time.time() - start)
+        return jsonify({
+            'status': 200,
+            'msg': 'Image stylized successfully.',
+            'file_id': str(stylized_img_id)
+        })
 
 
 class Supersize(Resource):
     def post(self):
         # start = time.time()
+        username = request.form['username']
         img_id = ObjectId(request.form['file_id'])
         # if 'image' in request.files:
         #     img = fs.get(ObjectId(file_id))
@@ -189,6 +189,10 @@ class Supersize(Resource):
 
         # supersize = time.time()
         supersized_img_id = supersize_gan.process(img_id)
+        images.insert_one({
+            'username': username,
+            'file_id': supersized_img_id
+        })
         # print('Styling time:', time.time() - supersize)
         # print('Total time:', time.time() - start)
         return jsonify({
