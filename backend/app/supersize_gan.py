@@ -137,7 +137,8 @@ def process(img_id):
     IMAGE_NAME = img_id
 
     model = Generator(UPSCALE_FACTOR).eval()
-    model.load_state_dict(torch.load('./models/pretrained/supersize_gan.pt', map_location=torch.device('cpu')), False)
+    model.load_state_dict(torch.load('./models/pretrained/supersize_gan.pt', 
+                          map_location=torch.device('cpu')), False)
     image = Image.open(fs.get(IMAGE_NAME))
     with torch.no_grad():
         image = Variable(ToTensor()(image))
@@ -148,6 +149,4 @@ def process(img_id):
     file = io.BytesIO()
     out_img.save(file, format="JPEG")
     file_id = fs.put(file.getvalue())
-    #out_img = ToPILImage()(out[0].data.cpu())
-    #out_img.save('out_srf_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
     return file_id
