@@ -26,7 +26,7 @@ class AppProvider extends React.Component {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    if (response.data.status == "200") {
+    if (response.data.status === 200) {
       this.setState({
         isAuth: true,
         isWaiting: false,
@@ -54,7 +54,7 @@ class AppProvider extends React.Component {
       headers: { "Content-Type": "multipart/form-data" },
     });
 
-    if (response.data.status == "200") {
+    if (response.data.status === 200) {
       this.setState({ isAuth: true, isWaiting: false, username: username });
       console.log("Registered Successfully!");
     } else {
