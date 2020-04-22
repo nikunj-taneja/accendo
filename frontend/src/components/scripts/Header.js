@@ -29,15 +29,13 @@ class Header extends React.Component {
             </Nav.Item>
           </Nav>
           <Nav>
-            <Nav.Item>
-              <Link to="/">
-                <h6 className="bodyText">
-                  {this.context.isAuth
-                    ? "Logged in as: " + this.context.username
-                    : "Not Logged in"}
-                </h6>
-              </Link>
-            </Nav.Item>
+            <Navbar.Text>
+              <h6 className="bodyText">
+                {this.context.isAuth
+                  ? "Logged in as: " + this.context.username
+                  : "Not Logged in"}
+              </h6>
+            </Navbar.Text>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
