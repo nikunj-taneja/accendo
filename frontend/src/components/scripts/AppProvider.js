@@ -2,6 +2,8 @@ import React from "react";
 import axios from "axios";
 
 import AuthContext from "./AuthContext";
+import LoadingOverlay from "react-loading-overlay";
+
 import App from "./App";
 
 class AppProvider extends React.Component {
@@ -9,6 +11,10 @@ class AppProvider extends React.Component {
     isAuth: false,
     isWaiting: false,
     username: null,
+  };
+
+  setWaiting = (waiting) => {
+    this.setState({ isWaiting: waiting });
   };
 
   login = async (username, password) => {
@@ -66,16 +72,26 @@ class AppProvider extends React.Component {
 
   render() {
     return (
-      <AuthContext.Provider
-        value={{
-          ...this.state,
-          login: this.login,
-          register: this.register,
-          logout: this.logout,
+      <LoadingOverlay
+        styles={{
+          wrapper: (base) => ({ ...base, height: "100%" }),
         }}
+        active={this.state.isWaiting}
+        spinner
+        text="working..."
       >
-        <App />
-      </AuthContext.Provider>
+        <AuthContext.Provider
+          value={{
+            ...this.state,
+            login: this.login,
+            register: this.register,
+            logout: this.logout,
+            setWaiting: this.setWaiting,
+          }}
+        >
+          <App />
+        </AuthContext.Provider>
+      </LoadingOverlay>
     );
   }
 }

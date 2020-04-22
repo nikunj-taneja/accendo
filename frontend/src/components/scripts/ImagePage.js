@@ -12,18 +12,20 @@ class ImagePage extends React.Component {
     var data = new FormData();
 
     data.set("file_id", this.props.file_id);
+
+    this.context.setWaiting(true);
     const response = await axios({
       method: "post",
       url: "/supersize",
       data: data,
       headers: { "Content-Type": "multipart/form-data" },
     });
+    this.context.setWaiting(false);
 
     console.log(response);
   };
 
   render() {
-    console.log(`http:localhost:5000/${this.props.file_id}`);
     return (
       <Container
         style={{ background: "#141e30", padding: 20, borderRadius: 20 }}
