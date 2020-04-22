@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Header from "./Header";
 import Gallery from "./Gallery";
-import Profile from "./Profile";
+import ProfileWrapper from "./ProfileWrapper";
 import SignUp from "./SignUp";
 import UserPage from "./UserPage";
 
@@ -24,13 +24,13 @@ class App extends React.Component {
         <Container className="main-body">
           <Switch>
             <Route path="/" exact={true}>
-              {this.context.isAuth ? <Profile /> : <UserPage />}
+              {this.context.isAuth ? <ProfileWrapper /> : <UserPage />}
             </Route>
             <Route path="/gallery">
               <Gallery />
             </Route>
             <Route path="/profile">
-              <Profile />
+              <ProfileWrapper />
             </Route>
             <Route path="/signup">
               <SignUp />
