@@ -187,13 +187,14 @@ def testing():
       <br>
       <input type=submit value=Submit>
     </form>
-    <h1>Upload new file</h1>
+    <h1>Stylize</h1>
     <form action='/stylize' method=POST enctype=multipart/form-data>
       <input type=text name=username>
       <input type=file name=content_img>
       <input type=file name=style_img>
       <input type=submit value=Upload>
     </form>
+    <h1>Supersize</h1>
      <form action='/supersize' method=POST enctype=multipart/form-data>
       <input type=text name=username>
       <input type=file name=img>

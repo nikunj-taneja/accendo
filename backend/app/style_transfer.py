@@ -15,8 +15,6 @@ fs = GridFS(db)
 images = db["images"]
 
 # define Gram Matrix
-
-
 class GramMatrix(nn.Module):
     def forward(self, y):
         (b, ch, h, w) = y.size()
@@ -26,13 +24,10 @@ class GramMatrix(nn.Module):
         return gram
 
 # define Co-Match layer
-
-
 class CoMatch(nn.Module):
     """ Co-Match Layer for tuning the 
     feature map with target Gram Matrix
     """
-
     def __init__(self, C, B=1):
         super(CoMatch, self).__init__()
         # B is equal to 1 or input mini_batch
@@ -89,8 +84,6 @@ class UpSampleConvLayer(nn.Module):
         return out
 
 # pre activation layers
-
-
 class Bottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=nn.BatchNorm2d):
         super(Bottleneck, self).__init__()
@@ -140,8 +133,6 @@ class UpSampleBottleneck(nn.Module):
         return self.residual_layer(x) + self.conv_block(x)
 
 # the style transfer model
-
-
 class Model(nn.Module):
     def __init__(self, input_nc=3, output_nc=3, ngf=64, norm_layer=nn.InstanceNorm2d, n_blocks=6, gpu_ids=[]):
         super(Model, self).__init__()
