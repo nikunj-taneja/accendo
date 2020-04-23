@@ -21,21 +21,26 @@ fs = GridFS(db)
 users = db.users
 images = db.images
 
+
 def user_exists(username):
     return users.find({"username": username}).count() != 0
+
 
 def email_exists(email):
     return users.find({"email": email}).count() != 0
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 def already_liked(file_id, username):
     return images.find({
         'file_id': file_id,
         'likes': username
     }).count() == 1
+
 
 class Register(Resource):
     def post(self):
@@ -78,7 +83,7 @@ class Login(Resource):
         user = users.find_one({
             'username': username,
         })
-        
+
         if user:
             hashed_pw = user['password']
             if bcrypt.checkpw(password.encode('utf8'), hashed_pw):
@@ -111,8 +116,8 @@ class Upload(Resource):
             if image_file and allowed_file(image_file.filename):
                 file_id = fs.put(image_file)
                 images.insert_one({
-                    'username' : username, 
-                    'file_id' : file_id,
+                    'username': username,
+                    'file_id': file_id,
                 })
                 return jsonify({
                     'status': 200,
@@ -134,7 +139,7 @@ class Upload(Resource):
 class GetFile(Resource):
     def get(self, file_id):
         if fs.exists(ObjectId(file_id)):
-            return send_file(fs.get(ObjectId(file_id)), attachment_filename = str(file_id) + '.jpg')
+            return send_file(fs.get(ObjectId(file_id)), attachment_filename=str(file_id) + '.jpg')
         else:
             return jsonify({
                 'status': 404,
@@ -145,7 +150,7 @@ class GetFile(Resource):
 class GetInfo(Resource):
     def get(self, file_id):
         if fs.exists(ObjectId(file_id)):
-            root = 'http://localhost:5000/file/'
+            root = request.host_url + 'file/'
             img = images.find({'file_id': ObjectId(file_id)})[0]
             res = {
                 'status': 200,
@@ -158,7 +163,7 @@ class GetInfo(Resource):
             }
             return jsonify(res)
         else:
-            return  jsonify({
+            return jsonify({
                 'status': 404,
                 'msg': 'File not found'
             })
@@ -186,12 +191,12 @@ class Stylize(Resource):
                 'msg': 'Invalid style image'
             })
         stylized_img_id = style_transfer.process(content_img_id, style_img_id)
-        
+
         images.insert_one({
             'username': username,
             'file_id': stylized_img_id
         })
-        
+
         return jsonify({
             'status': 200,
             'msg': 'Image stylized successfully.',
@@ -204,12 +209,12 @@ class Supersize(Resource):
         username = request.form['username']
         img_id = ObjectId(request.form['file_id'])
         supersized_img_id = supersize_gan.process(img_id)
-        
+
         images.insert_one({
             'username': username,
             'file_id': supersized_img_id
         })
-        
+
         return jsonify({
             'status': 200,
             'msg': 'Image supersized successfully.',
@@ -225,11 +230,11 @@ class Gallery(Resource):
             'images': []
         }
         for img in images.find({'username': username}):
-            root = 'http://localhost:5000/file/'
+            root = request.host_url + 'file/'
             temp = {
                 'username': img['username'],
                 'image_url': root + str(img['file_id']),
-                'file_id': str(img['file_id'])
+                'file_id': str(img['file_id']),
             }
             res['images'].append(temp)
         return jsonify(res)
@@ -243,7 +248,7 @@ class Post(Resource):
         if username and file_id and fs.exists(file_id):
             images.update_one({
                 'file_id': file_id,
-            },{
+            }, {
                 '$set': {
                     'public': True,
                     'likes': [],
@@ -271,7 +276,7 @@ class Like(Resource):
             if not already_liked(file_id, username):
                 images.update_one({
                     'file_id': file_id,
-                },{
+                }, {
                     '$push': {
                         'likes': username,
                     },
@@ -291,7 +296,7 @@ class Like(Resource):
             else:
                 images.update_one({
                     'file_id': file_id,
-                },{
+                }, {
                     '$pull': {
                         'likes': username,
                     },
@@ -313,7 +318,7 @@ class Like(Resource):
                 'status': 301,
                 'msg': 'Invalid file_id'
             })
-    
+
 
 class Community(Resource):
     def get(self):
@@ -323,7 +328,7 @@ class Community(Resource):
             'images': []
         }
         for img in images.find({'public': True}):
-            root = 'http://localhost:5000/file/'
+            root = request.host_url + 'file/'
             temp = {
                 'username': img['username'],
                 'image_url': root + str(img['file_id']),
@@ -398,6 +403,7 @@ def testing():
         <input type=submit value=Like>
     </form>
     '''
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
