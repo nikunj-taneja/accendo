@@ -40,7 +40,7 @@ class SuccessfulUpload extends React.Component {
         style={{ background: "#141e30", padding: 20, borderRadius: 20 }}
         className="text-center"
       >
-        <h1>Image Successfully Uploaded!</h1>
+        <h3>Your image has been uploaded!</h3>
         <Tabs
           id="tabs"
           activeKey={this.state.key}

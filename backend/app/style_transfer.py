@@ -12,7 +12,6 @@ from gridfs import GridFS
 client = MongoClient("mongodb://db:27017")
 db = client.accendo
 fs = GridFS(db)
-images = db["images"]
 
 # define Gram Matrix
 

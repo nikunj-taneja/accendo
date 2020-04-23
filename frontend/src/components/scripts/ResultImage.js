@@ -36,7 +36,7 @@ class ResultImage extends React.Component {
         style={{ background: "#141e30", padding: 20, borderRadius: 20 }}
         className="text-center"
       >
-        <h1>Here's your image!</h1>
+        <h3>Here's your image!</h3>
         <img style={{ maxWidth: "100%" }} src={imgsrc}></img>
         <Form method="get" action={imgsrc}>
           <Button type="submit" size="lg" className="mt-3" block>

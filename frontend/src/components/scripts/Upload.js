@@ -100,7 +100,7 @@ class Upload extends React.Component {
               <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />
 
-                <p>Drag 'n' drop some files here, or click to select files</p>
+                <p>Drag 'n' drop some your image here, or just click anywhere to select one!</p>
                 <aside>
                   {this.state.selected ? (
                     this.state.loading ? (

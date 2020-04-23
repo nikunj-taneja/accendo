@@ -179,7 +179,7 @@ class Stylize(Resource):
                 style_img_id = fs.put(style_img)
                 images.insert_one({
                     'username': username,
-                    'img': style_img_id
+                    'file_id': style_img_id
                 })
         else:
             return jsonify({
@@ -227,13 +227,12 @@ class Gallery(Resource):
         }
         for img in images.find({'username': username}):
             root = 'http://localhost:5000/file/'
-            if 'file_id' in img:
-                temp = {
-                    'username': img['username'],
-                    'image_url': root + str(img['file_id']),
-                    'file_id': str(img['file_id'])
-                }
-                res['images'].append(temp)
+            temp = {
+                'username': img['username'],
+                'image_url': root + str(img['file_id']),
+                'file_id': str(img['file_id'])
+            }
+            res['images'].append(temp)
         return jsonify(res)
 
 
