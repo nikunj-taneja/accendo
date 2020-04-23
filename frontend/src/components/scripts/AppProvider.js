@@ -86,8 +86,10 @@ class AppProvider extends React.Component {
 
     if (response.data.status === 200) {
       this.setState({ isAuth: true, isWaiting: false, username: username });
+      return "ok";
     } else {
       this.setState({ isWaiting: false });
+      return response.data.msg;
     }
   };
 

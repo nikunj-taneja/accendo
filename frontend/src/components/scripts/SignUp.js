@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 
 import AuthContext from "./AuthContext";
 
@@ -23,6 +23,7 @@ class SignUp extends React.Component {
       password: "",
       confirm_pass: "",
       valid: false,
+      errMsg: "",
     };
   }
 
@@ -78,7 +79,7 @@ class SignUp extends React.Component {
     });
   };
 
-  TrySignUp = (event) => {
+  TrySignUp = async (event) => {
     event.preventDefault();
 
     if (!this.state.valid) {
@@ -86,78 +87,92 @@ class SignUp extends React.Component {
       return;
     }
 
-    this.context.register(
+    const responseMsg = await this.context.register(
       this.state.username,
       this.state.email,
       this.state.password
     );
+
+    if (responseMsg !== "ok") {
+      this.setState({ errMsg: responseMsg });
+    }
   };
 
   render() {
     return (
-      <Form onSubmit={this.TrySignUp}>
-        <Form.Group>
-          <Form.Label className="bodyText">Username</Form.Label>
-          <Form.Control
-            name="username"
-            size="lg"
-            type="text"
-            className="bodyInput"
-            isInvalid={!!this.state.errors.username}
-            onChange={this.handleChange}
-          />
-          <Form.Control.Feedback type="invalid">
-            {this.state.errors.username}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label className="bodyText">Email</Form.Label>
-          <Form.Control
-            name="email"
-            isInvalid={!!this.state.errors.email}
-            size="lg"
-            type="email"
-            className="bodyInput"
-            onChange={this.handleChange}
-          />
-          <Form.Control.Feedback type="invalid">
-            {this.state.errors.email}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label className="bodyText">Password</Form.Label>
-          <Form.Control
-            name="password"
-            size="lg"
-            type="password"
-            className="bodyInput"
-            onChange={this.handleChange}
-            isInvalid={!!this.state.errors.password}
-          ></Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {this.state.errors.password}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label className="bodyText">Confirm Password</Form.Label>
-          <Form.Control
-            name="confirm_pass"
-            size="lg"
-            type="password"
-            className="bodyInput"
-            onChange={this.handleChange}
-            isInvalid={!!this.state.errors.confirm_pass}
-          ></Form.Control>
-          <Form.Control.Feedback type="invalid">
-            {this.state.errors.confirm_pass}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <div className="text-left">
-          <Button disabled={!this.state.valid} type="submit" size="lg">
-            Submit
-          </Button>
-        </div>
-      </Form>
+      <div>
+        <Alert
+          variant="danger"
+          onClose={() => this.setState({ showError: false })}
+          dismissible
+          show={this.state.errMsg}
+        >
+          <Alert.Heading>{this.state.errMsg}</Alert.Heading>
+        </Alert>{" "}
+        <Form onSubmit={this.TrySignUp}>
+          <Form.Group>
+            <Form.Label className="bodyText">Username</Form.Label>
+            <Form.Control
+              name="username"
+              size="lg"
+              type="text"
+              className="bodyInput"
+              isInvalid={!!this.state.errors.username}
+              onChange={this.handleChange}
+            />
+            <Form.Control.Feedback type="invalid">
+              {this.state.errors.username}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className="bodyText">Email</Form.Label>
+            <Form.Control
+              name="email"
+              isInvalid={!!this.state.errors.email}
+              size="lg"
+              type="email"
+              className="bodyInput"
+              onChange={this.handleChange}
+            />
+            <Form.Control.Feedback type="invalid">
+              {this.state.errors.email}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className="bodyText">Password</Form.Label>
+            <Form.Control
+              name="password"
+              size="lg"
+              type="password"
+              className="bodyInput"
+              onChange={this.handleChange}
+              isInvalid={!!this.state.errors.password}
+            ></Form.Control>
+            <Form.Control.Feedback type="invalid">
+              {this.state.errors.password}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group>
+            <Form.Label className="bodyText">Confirm Password</Form.Label>
+            <Form.Control
+              name="confirm_pass"
+              size="lg"
+              type="password"
+              className="bodyInput"
+              onChange={this.handleChange}
+              isInvalid={!!this.state.errors.confirm_pass}
+            ></Form.Control>
+            <Form.Control.Feedback type="invalid">
+              {this.state.errors.confirm_pass}
+            </Form.Control.Feedback>
+          </Form.Group>
+          <div className="text-left">
+            <Button disabled={!this.state.valid} type="submit" size="lg">
+              Submit
+            </Button>
+          </div>
+        </Form>
+      </div>
     );
   }
 }

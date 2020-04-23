@@ -1,9 +1,9 @@
 .imgCol {
-  margin: 4px;
+  margin: 10px;
 }
 
 .presetStyleImg {
-  max-height: 10vh;
+  max-height: 150px;
 }
 
 .selectedStyleImg {
