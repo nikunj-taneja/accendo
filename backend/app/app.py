@@ -242,7 +242,6 @@ class Like(Resource):
                 })
             else:
                 images.update_one({
-                    'username': username,
                     'file_id': file_id,
                 },{
                     '$pull': {
