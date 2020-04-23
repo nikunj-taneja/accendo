@@ -28,7 +28,7 @@ class ResultImage extends React.Component {
   };
 
   render() {
-    const imgsrc = `http://${window.location.hostname}:5000/file/${this.props.file_id}`;
+    const imgsrc = `/file/${this.props.file_id}`;
     return this.state.redirect_to_community ? (
       <Redirect to="/communitygallery" />
     ) : (
