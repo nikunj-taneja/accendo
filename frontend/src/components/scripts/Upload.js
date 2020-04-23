@@ -64,7 +64,7 @@ class Upload extends React.Component {
     if (this.state.images.length > 0) {
       imgs = (
         <div>
-          <h1 className="bodyText mb-5">User Images:</h1>
+          <h3 className="bodyText mb-5">Your Images:</h3>
           <Masonry
             className="masonry-grid"
             elementType="div"
@@ -92,15 +92,17 @@ class Upload extends React.Component {
 
     return (
       <Container className="m-10">
-        {imgs}
-        <h4 className="pb-4">Add Image: </h4>
+        <h3 className="pb-4">Add Image: </h3>
         <Dropzone onDrop={this.handleDrop} accept="image/*">
           {({ getRootProps, getInputProps }) => (
             <section>
               <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />
 
-                <p>Drag 'n' drop some your image here, or just click anywhere to select one!</p>
+                <p>
+                  Drag 'n' drop some your image here, or just click anywhere to
+                  select one!
+                </p>
                 <aside>
                   {this.state.selected ? (
                     this.state.loading ? (
@@ -122,6 +124,7 @@ class Upload extends React.Component {
         <Button size="lg" block className="mt-3" onClick={this.submit}>
           Upload
         </Button>
+        <div style={{ marginTop: 25 }}>{imgs}</div>
       </Container>
     );
   }
