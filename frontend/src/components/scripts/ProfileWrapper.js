@@ -10,7 +10,7 @@ class ProfileWrapper extends React.Component {
     return this.context.isAuth ? (
       <Profile />
     ) : (
-      <h1 className="bodyText">Please login to see profile</h1>
+      <h1 className="bodyText">Please login to see your profile!</h1>
     );
   }
 }

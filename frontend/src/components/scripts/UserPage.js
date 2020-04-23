@@ -8,7 +8,7 @@ class UserPage extends React.Component {
     return (
       <Row>
         <Col>
-          <h2 className="bodyText">Dont Have an account?</h2>
+          <h2 className="bodyText">Don't have an account yet?</h2>
           <h1 className="titleText">Sign Up!</h1>
           <hr />
           <SignUp />
