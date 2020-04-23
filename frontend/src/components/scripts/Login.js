@@ -43,7 +43,7 @@ class Login extends React.Component {
           dismissible
           show={this.state.showError}
         >
-          <Alert.Heading>Invalid Username or Password</Alert.Heading>
+          Invalid Username or Password
         </Alert>
         <Form onSubmit={this.handleSubmit}>
           <Form.Group>
