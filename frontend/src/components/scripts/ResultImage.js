@@ -37,7 +37,7 @@ class ResultImage extends React.Component {
         className="text-center"
       >
         <h3>Here's your image!</h3>
-        <Image fluid src={imgsrc} />
+        <Image style={{ maxHeight: 400 }} fluid src={imgsrc} />
         <Button size="lg" className="mt-3" block>
           <a href={imgsrc}>Download</a>
         </Button>

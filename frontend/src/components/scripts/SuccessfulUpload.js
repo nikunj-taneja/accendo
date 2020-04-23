@@ -30,7 +30,7 @@ class SuccessfulUpload extends React.Component {
 
     const img = (
       <img
-        style={{ maxWidth: "100%", marginTop: 10 }}
+        style={{ maxWidth: "100%", maxHeight: 400, marginTop: 10 }}
         src={`/file/${this.props.file_id}`}
       ></img>
     );
