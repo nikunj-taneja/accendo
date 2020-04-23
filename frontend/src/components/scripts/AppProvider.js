@@ -96,7 +96,14 @@ class AppProvider extends React.Component {
       console.log("Sign Up Failed");
     }
   };
-  logout = () => {};
+
+  logout = () => {
+    this.setState({
+      userImages: [],
+      username: null,
+      isAuth: false,
+    });
+  };
 
   render() {
     return (
