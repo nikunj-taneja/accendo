@@ -21,10 +21,10 @@ class Header extends React.Component {
         <Navbar.Collapse>
           <Nav className="mr-auto">
             <Nav.Item>
-              <Link to="/CommunityGallery">Community</Link>
+              <Link to="/Profile">My Gallery</Link>
             </Nav.Item>
             <Nav.Item>
-              <Link to="/Profile">My Gallery</Link>
+              <Link to="/CommunityGallery">Community</Link>
             </Nav.Item>
           </Nav>
           <Nav>
