@@ -15,7 +15,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 api = Api(app)
 
-client = MongoClient("mongodb://db:27017")
+client = MongoClient("mongodb://localhost:27017")
 db = client.accendo
 fs = GridFS(db)
 users = db.users
@@ -245,12 +245,10 @@ class Post(Resource):
                     'like_count': 0
                 }
             })
-            like_count = images.find({'file_id': file_id})[0]['like_count']
             return jsonify({
                 'status': 200,
                 'msg': 'The image has been made public successfully',
                 'file_id': str(file_id),
-                'like_count': like_count
             })
         else:
             return jsonify({
@@ -331,6 +329,7 @@ class Community(Resource):
             res['images'].append(temp)
         return jsonify(res)
 
+
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
 api.add_resource(Upload, '/upload')
@@ -342,6 +341,7 @@ api.add_resource(Post, '/post')
 api.add_resource(Like, '/like')
 api.add_resource(Community, '/community')
 api.add_resource(Gallery, '/gallery/<string:username>')
+
 
 @app.route('/')
 def testing():
@@ -395,4 +395,4 @@ def testing():
     '''
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(debug=True)

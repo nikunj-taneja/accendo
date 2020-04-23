@@ -9,7 +9,7 @@ from PIL import Image
 from pymongo import MongoClient
 from gridfs import GridFS
 
-client = MongoClient("mongodb://db:27017")
+client = MongoClient("mongodb://localhost:27017")
 db = client.accendo
 fs = GridFS(db)
 images = db["images"]
@@ -219,7 +219,7 @@ def preprocess_batch(batch):
 def process(content_img_path, style_img_path):
     content_image = load_rgb_image(
         content_img_path,
-        size=768,
+        size=512,
         keep_asp=True
     ).unsqueeze(0)
 
