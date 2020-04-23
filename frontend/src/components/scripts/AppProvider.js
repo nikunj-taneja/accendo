@@ -103,6 +103,7 @@ class AppProvider extends React.Component {
     return (
       <LoadingOverlay
         styles={{
+          overlay: (base) => ({ ...base, height: "100%" }),
           wrapper: (base) => ({ ...base, height: "100%" }),
         }}
         active={this.state.isWaiting}
