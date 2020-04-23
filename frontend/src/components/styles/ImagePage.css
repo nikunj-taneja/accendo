@@ -1,0 +1,13 @@
+.imgCol {
+  margin: 4px;
+}
+
+.presetStyleImg {
+  max-height: 10vh;
+}
+
+.selectedStyleImg {
+  border-color: #28b161;
+  border-width: 2px;
+  border-style: solid;
+}

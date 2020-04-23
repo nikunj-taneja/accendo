@@ -15,6 +15,8 @@ fs = GridFS(db)
 images = db["images"]
 
 # define Gram Matrix
+
+
 class GramMatrix(nn.Module):
     def forward(self, y):
         (b, ch, h, w) = y.size()
@@ -24,10 +26,13 @@ class GramMatrix(nn.Module):
         return gram
 
 # define Co-Match layer
+
+
 class CoMatch(nn.Module):
     """ Co-Match Layer for tuning the 
     feature map with target Gram Matrix
     """
+
     def __init__(self, C, B=1):
         super(CoMatch, self).__init__()
         # B is equal to 1 or input mini_batch
@@ -52,6 +57,8 @@ class CoMatch(nn.Module):
         return self.__class__.__name__ + '(' + 'N x ' + str(self.C) + ')'
 
 # some basic layers
+
+
 class ConvLayer(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride):
         super(ConvLayer, self).__init__()
@@ -63,6 +70,7 @@ class ConvLayer(nn.Module):
         out = self.reflection_pad(x)
         out = self.conv2d(out)
         return out
+
 
 class UpSampleConvLayer(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride, upsample=None):
@@ -84,6 +92,8 @@ class UpSampleConvLayer(nn.Module):
         return out
 
 # pre activation layers
+
+
 class Bottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=nn.BatchNorm2d):
         super(Bottleneck, self).__init__()
@@ -111,6 +121,7 @@ class Bottleneck(nn.Module):
             residual = x
         return residual + self.conv_block(x)
 
+
 class UpSampleBottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=2, norm_layer=nn.BatchNorm2d):
         super(UpSampleBottleneck, self).__init__()
@@ -133,6 +144,8 @@ class UpSampleBottleneck(nn.Module):
         return self.residual_layer(x) + self.conv_block(x)
 
 # the style transfer model
+
+
 class Model(nn.Module):
     def __init__(self, input_nc=3, output_nc=3, ngf=64, norm_layer=nn.InstanceNorm2d, n_blocks=6, gpu_ids=[]):
         super(Model, self).__init__()
@@ -175,6 +188,7 @@ class Model(nn.Module):
     def forward(self, input):
         return self.model(input)
 
+
 def load_rgb_image(filename, size=None, scale=None, keep_asp=False):
     img = Image.open(fs.get(filename)).convert('RGB')
     if size is not None:
@@ -190,6 +204,7 @@ def load_rgb_image(filename, size=None, scale=None, keep_asp=False):
     img = np.array(img).transpose(2, 0, 1)
     img = torch.from_numpy(img).float()
     return img
+
 
 def save_rgb_image(tensor, filename, cuda=False):
     if cuda:
@@ -216,16 +231,17 @@ def preprocess_batch(batch):
     batch = batch.transpose(0, 1)
     return batch
 
+
 def process(content_img_path, style_img_path):
     content_image = load_rgb_image(
         content_img_path,
-        size=768,
+        size=256,
         keep_asp=True
     ).unsqueeze(0)
 
     style = load_rgb_image(
         style_img_path,
-        size=512).unsqueeze(0)
+        size=256).unsqueeze(0)
 
     style = preprocess_batch(style)
 
