@@ -44,7 +44,7 @@ class ImageCard extends React.Component {
       <div className="imgCard">
         <img className="innerImg" src={"/file/" + this.img.file_id} />
         <br />
-        <div>
+        <div className="bottomSection">
           <h6 style={{ display: "inline" }} className="likeCount">
             Likes: {this.img.like_count}
           </h6>
@@ -53,10 +53,10 @@ class ImageCard extends React.Component {
               style={{
                 position: "absolute",
                 right: 20,
-                bottom: 10,
+                bottom: 15,
                 color: this.state.liked ? "#28b161" : "#243b55",
               }}
-              size="1.2em"
+              size="1.3em"
               onClick={this.like}
             />
           ) : (

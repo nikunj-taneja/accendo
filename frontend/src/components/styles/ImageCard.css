@@ -1,8 +1,8 @@
 .imgCard {
   background-color: #141e30;
-  padding: 2px;
+  padding: 5px;
   margin: 5px;
-  border-radius: 10px;
+  border-radius: 15px;
 }
 
 .likeCount {
@@ -14,4 +14,9 @@
 .innerImg {
   border-radius: 10px;
   width: 300px;
+}
+
+.bottomSection {
+  margin-top: 5px;
+  margin-bottom: 3px;
 }
