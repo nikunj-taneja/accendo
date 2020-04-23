@@ -31,7 +31,7 @@ class CommunityGallery extends React.Component {
   render() {
     return (
       <div>
-        <h1 className="bodyText mb-5">Community Images:</h1>
+        <h1 className="bodyText mb-5">Welcome to the Accedo community!</h1>
         <Masonry
           className="masonry-grid"
           elementType="div"
