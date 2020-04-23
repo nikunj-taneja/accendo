@@ -178,7 +178,6 @@ class Stylize(Resource):
             if style_img and allowed_file(style_img.filename):
                 style_img_id = fs.put(style_img)
                 images.insert_one({
-                    'username': username,
                     'file_id': style_img_id
                 })
         else:
