@@ -32,6 +32,19 @@ class AppProvider extends React.Component {
     this.setWaiting(false);
   };
 
+  getUserImages = async () => {
+    this.setWaiting(true);
+
+    const response = await axios.get(`/gallery/${this.state.username}`);
+
+    console.log(response);
+
+    this.setState({
+      userImages: response.data.images,
+    });
+    this.setWaiting(false);
+  };
+
   login = async (username, password) => {
     this.setWaiting(true);
 
@@ -103,6 +116,7 @@ class AppProvider extends React.Component {
             logout: this.logout,
             setWaiting: this.setWaiting,
             getCommunityImages: this.getCommunityImages,
+            getUserImages: this.getUserImages,
           }}
         >
           <App />
