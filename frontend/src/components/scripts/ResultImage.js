@@ -38,9 +38,6 @@ class ResultImage extends React.Component {
       >
         <h3>Here's your image!</h3>
         <Image style={{ maxHeight: 400 }} fluid src={imgsrc} />
-        <Button size="lg" className="mt-3" block>
-          <a href={imgsrc}>Download</a>
-        </Button>
         <Button size="lg" block className="mt-3" onClick={this.handlePost}>
           Post
         </Button>
