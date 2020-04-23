@@ -184,6 +184,12 @@ class Stylize(Resource):
                 "msg": "Invalid style image"
             })
         stylized_img_id = style_transfer.process(content_img_id, style_img_id)
+        
+        images.insert_one({
+            'username': username,
+            'file_id': supersized_img_id
+        })
+        
         return jsonify({
             'status': 200,
             'msg': 'Image stylized successfully.',
