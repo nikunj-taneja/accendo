@@ -15,7 +15,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 api = Api(app)
 
-client = MongoClient("mongodb://db:27017")
+client = MongoClient("mongodb://localhost:27017")
 db = client.accendo
 fs = GridFS(db)
 users = db.users
@@ -127,15 +127,38 @@ class Upload(Resource):
                 'msg': 'No file in request'
             })
 
-@app.route('/file/<file_id>')
-def get_file(file_id):
-    if fs.exists(ObjectId(file_id)):
-        return send_file(fs.get(ObjectId(file_id)), attachment_filename = str(file_id) + '.jpg')
-    else:
-        return jsonify({
-            'status': 404,
-            'msg': 'File not found'
-        })
+
+class GetFile(Resource):
+    def get(self, file_id):
+        if fs.exists(ObjectId(file_id)):
+            return send_file(fs.get(ObjectId(file_id)), attachment_filename = str(file_id) + '.jpg')
+        else:
+            return jsonify({
+                'status': 404,
+                'msg': 'File not found'
+            })
+
+
+class GetInfo(Resource):
+    def get(self, file_id):
+        if fs.exists(ObjectId(file_id)):
+            root = 'http://localhost:5000/file/'
+            img = images.find({'file_id': ObjectId(file_id)})[0]
+            res = {
+                'status': 200,
+                'msg': 'Image info compiled successfully',
+                'username': img['username'],
+                'image_url': root + str(img['file_id']),
+                'file_id': str(img['file_id']),
+                'likes': img['likes'],
+                'like_count': img['like_count'],
+            }
+            return jsonify(res)
+        else:
+            return  jsonify({
+                'status': 404,
+                'msg': 'File not found'
+            })
 
 
 class Stylize(Resource):
@@ -184,6 +207,7 @@ class Supersize(Resource):
             'msg': 'Image supersized successfully.',
             'file_id': str(supersized_img_id)
         })
+
 
 class Post(Resource):
     def post(self):
@@ -266,17 +290,33 @@ class Like(Resource):
                 'msg': 'Invalid file_id'
             })
     
+class Community(Resource):
     def get(self):
-        pass
-        
+        res = {
+            'images': []
+        }
+        for img in images.find({'public': True}):
+            root = 'http://localhost:5000/file/'
+            temp = {
+                'username': img['username'],
+                'image_url': root + str(img['file_id']),
+                'file_id': str(img['file_id']),
+                'likes': img['likes'],
+                'like_count': img['like_count'],
+            }
+            res['images'].append(temp)
+        return jsonify(res)
 
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
 api.add_resource(Upload, '/upload')
 api.add_resource(Stylize, '/stylize')
 api.add_resource(Supersize, '/supersize')
+api.add_resource(GetFile, '/file/<string:file_id>')
+api.add_resource(GetInfo, '/info/<string:file_id>')
 api.add_resource(Post, '/post')
 api.add_resource(Like, '/like')
+api.add_resource(Community, '/community')
 
 @app.route('/')
 def testing():
@@ -330,4 +370,4 @@ def testing():
     '''
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(debug=True)
