@@ -121,7 +121,13 @@ class Upload extends React.Component {
             </section>
           )}
         </Dropzone>
-        <Button size="lg" block className="mt-3" onClick={this.submit}>
+        <Button
+          disabled={this.state.file === null}
+          size="lg"
+          block
+          className="mt-3"
+          onClick={this.submit}
+        >
           Upload
         </Button>
         <div style={{ marginTop: 25 }}>{imgs}</div>
