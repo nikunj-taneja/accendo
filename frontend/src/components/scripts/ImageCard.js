@@ -45,9 +45,9 @@ class ImageCard extends React.Component {
         <img className="innerImg" src={"/file/" + this.img.file_id} />
         <br />
         <div>
-          <h5 style={{ display: "inline" }} className="likeCount">
+          <h6 style={{ display: "inline" }} className="likeCount">
             Likes: {this.img.like_count}
-          </h5>
+          </h6>
           {this.context.isAuth ? (
             <FaHeart
               style={{
