@@ -290,9 +290,12 @@ class Like(Resource):
                 'msg': 'Invalid file_id'
             })
     
+
 class Community(Resource):
     def get(self):
         res = {
+            'status': 200,
+            'msg': 'Community posts compiled successfully'
             'images': []
         }
         for img in images.find({'public': True}):
