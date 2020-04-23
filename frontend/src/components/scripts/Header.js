@@ -36,11 +36,18 @@ class Header extends React.Component {
                   : "Not Logged in"}
               </h6>
             </Navbar.Text>
-            <Nav.Item>
-              <Button style={{ marginLeft: 20 }} onClick={this.context.logout}>
-                Logout
-              </Button>
-            </Nav.Item>
+            {this.context.isAuth ? (
+              <Nav.Item>
+                <Button
+                  style={{ marginLeft: 20 }}
+                  onClick={this.context.logout}
+                >
+                  Logout
+                </Button>
+              </Nav.Item>
+            ) : (
+              ""
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
