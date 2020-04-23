@@ -16,6 +16,7 @@ class ImagePage extends React.Component {
     var data = new FormData();
 
     data.set("file_id", this.props.file_id);
+    data.set("username", this.context.username);
 
     this.context.setWaiting(true);
     const response = await axios({
