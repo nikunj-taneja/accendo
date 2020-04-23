@@ -183,8 +183,8 @@ class Stylize(Resource):
                 })
         else:
             return jsonify({
-                "status": 301,
-                "msg": "Invalid style image"
+                'status': 301,
+                'msg': 'Invalid style image'
             })
         stylized_img_id = style_transfer.process(content_img_id, style_img_id)
         
@@ -227,12 +227,13 @@ class Gallery(Resource):
         }
         for img in images.find({'username': username}):
             root = 'http://localhost:5000/file/'
-            temp = {
-                'username': img['username'],
-                'image_url': root + str(img['file_id']),
-                'file_id': str(img['file_id']),
-            }
-            res['images'].append(temp)
+            if 'file_id' in img:
+                temp = {
+                    'username': img['username'],
+                    'image_url': root + str(img['file_id']),
+                    'file_id': str(img['file_id'])
+                }
+                res['images'].append(temp)
         return jsonify(res)
 
 
