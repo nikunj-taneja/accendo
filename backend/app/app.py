@@ -209,6 +209,27 @@ class Supersize(Resource):
         })
 
 
+class Gallery(Resource):
+    def get(self, username):
+        res = {
+            'status': 200,
+            'msg': 'Gallery posts compiled successfully',
+            'images': []
+        }
+        for img in images.find({'username': username}):
+            root = 'http://localhost:5000/file/'
+            temp = {
+                'username': img['username'],
+                'image_url': root + str(img['file_id']),
+                'file_id': str(img['file_id']),
+                'public': img['public'],
+                'likes': img['likes'],
+                'like_count': img['like_count'],
+            }
+            res['images'].append(temp)
+        return jsonify(res)
+
+
 class Post(Resource):
     def post(self):
         data = request.form
@@ -295,7 +316,7 @@ class Community(Resource):
     def get(self):
         res = {
             'status': 200,
-            'msg': 'Community posts compiled successfully'
+            'msg': 'Community posts compiled successfully',
             'images': []
         }
         for img in images.find({'public': True}):
@@ -320,6 +341,7 @@ api.add_resource(GetInfo, '/info/<string:file_id>')
 api.add_resource(Post, '/post')
 api.add_resource(Like, '/like')
 api.add_resource(Community, '/community')
+api.add_resource(Gallery, '/gallery/<string:username>')
 
 @app.route('/')
 def testing():
