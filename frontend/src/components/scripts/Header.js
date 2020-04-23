@@ -12,7 +12,6 @@ class Header extends React.Component {
   static contextType = AuthContext;
 
   render() {
-    console.log("render");
     return (
       <Navbar className="header shadow-sm" expand="lg">
         <Navbar.Brand className="header-name">

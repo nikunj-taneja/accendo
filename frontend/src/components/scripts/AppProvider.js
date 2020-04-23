@@ -66,10 +66,10 @@ class AppProvider extends React.Component {
         isWaiting: false,
         username: username,
       });
-      console.log("Logged In!");
+      return true;
     } else {
       this.setWaiting(false);
-      console.log("Login Failed");
+      return false;
     }
   };
 

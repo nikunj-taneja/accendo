@@ -2,18 +2,16 @@ import React from "react";
 
 import AuthContext from "./AuthContext";
 
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Alert } from "react-bootstrap";
 
 class Login extends React.Component {
   static contextType = AuthContext;
 
-  constructor() {
-    super();
-    this.state = {
-      username: "",
-      password: "",
-    };
-  }
+  state = {
+    username: "",
+    password: "",
+    showError: false,
+  };
 
   handleChange = (event) => {
     const name = event.target.name;
@@ -24,14 +22,29 @@ class Login extends React.Component {
     });
   };
 
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    this.context.login(this.state.username, this.state.password);
+    const login = await this.context.login(
+      this.state.username,
+      this.state.password
+    );
+
+    if (!login) {
+      this.setState({ showError: true });
+    }
   };
 
   render() {
     return (
       <div>
+        <Alert
+          variant="danger"
+          onClose={() => this.setState({ showError: false })}
+          dismissible
+          show={this.state.showError}
+        >
+          <Alert.Heading>Invalid Username or Password</Alert.Heading>
+        </Alert>
         <Form onSubmit={this.handleSubmit}>
           <Form.Group>
             <Form.Label className="bodyText">Username</Form.Label>
