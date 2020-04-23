@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Image } from "react-bootstrap";
 import AuthContext from "./AuthContext";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
@@ -37,7 +37,7 @@ class ResultImage extends React.Component {
         className="text-center"
       >
         <h3>Here's your image!</h3>
-        <img style={{ maxWidth: "100%" }} src={imgsrc}></img>
+        <Image fluid src={imgsrc} />
         <Form method="get" action={imgsrc}>
           <Button type="submit" size="lg" className="mt-3" block>
             Download
