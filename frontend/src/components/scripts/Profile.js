@@ -42,7 +42,6 @@ class Profile extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div className="bodyText">
         <h5 className="pb-5 pt-3">Hi, {this.context.username}!</h5>

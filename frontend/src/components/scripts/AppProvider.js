@@ -24,8 +24,6 @@ class AppProvider extends React.Component {
 
     const response = await axios.get("/community");
 
-    console.log(response);
-
     this.setState({
       communityImages: response.data.images,
     });
@@ -36,8 +34,6 @@ class AppProvider extends React.Component {
     this.setWaiting(true);
 
     const response = await axios.get(`/gallery/${this.state.username}`);
-
-    console.log(response);
 
     this.setState({
       userImages: response.data.images,
@@ -90,10 +86,8 @@ class AppProvider extends React.Component {
 
     if (response.data.status === 200) {
       this.setState({ isAuth: true, isWaiting: false, username: username });
-      console.log("Registered Successfully!");
     } else {
       this.setState({ isWaiting: false });
-      console.log("Sign Up Failed");
     }
   };
 
