@@ -116,7 +116,6 @@ class Upload(Resource):
             if image_file and allowed_file(image_file.filename):
                 file_id = fs.put(image_file)
                 images.insert_one({
-                    'username': username,
                     'file_id': file_id,
                 })
                 return jsonify({
