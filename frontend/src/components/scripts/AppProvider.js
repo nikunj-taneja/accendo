@@ -11,14 +11,29 @@ class AppProvider extends React.Component {
     isAuth: false,
     isWaiting: false,
     username: null,
+    communityImages: [],
+    userImages: [],
   };
 
   setWaiting = (waiting) => {
     this.setState({ isWaiting: waiting });
   };
 
+  getCommunityImages = async () => {
+    this.setWaiting(true);
+
+    const response = await axios.get("/community");
+
+    console.log(response);
+
+    this.setState({
+      communityImages: response.data.images,
+    });
+    this.setWaiting(false);
+  };
+
   login = async (username, password) => {
-    this.setState({ isWaiting: true });
+    this.setWaiting(true);
 
     var data = new FormData();
 
@@ -40,7 +55,7 @@ class AppProvider extends React.Component {
       });
       console.log("Logged In!");
     } else {
-      this.setState({ isWaiting: false });
+      this.setWaiting(false);
       console.log("Login Failed");
     }
   };
@@ -87,6 +102,7 @@ class AppProvider extends React.Component {
             register: this.register,
             logout: this.logout,
             setWaiting: this.setWaiting,
+            getCommunityImages: this.getCommunityImages,
           }}
         >
           <App />
