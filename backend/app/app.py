@@ -15,7 +15,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
 api = Api(app)
 
-client = MongoClient("mongodb://localhost:27017")
+client = MongoClient("mongodb://db:27017")
 db = client.accendo
 fs = GridFS(db)
 users = db.users
@@ -373,4 +373,4 @@ def testing():
     '''
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0")
