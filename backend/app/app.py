@@ -228,7 +228,6 @@ class Gallery(Resource):
                 'username': img['username'],
                 'image_url': root + str(img['file_id']),
                 'file_id': str(img['file_id']),
-                'public': img['public'],
                 'likes': img['likes'],
                 'like_count': img['like_count'],
             }
