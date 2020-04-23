@@ -234,13 +234,13 @@ def preprocess_batch(batch):
 def process(content_img_path, style_img_path):
     content_image = load_rgb_image(
         content_img_path,
-        size=256,
+        size=1024,
         keep_asp=True
     ).unsqueeze(0)
 
     style = load_rgb_image(
         style_img_path,
-        size=256).unsqueeze(0)
+        size=512).unsqueeze(0)
 
     style = preprocess_batch(style)
 
