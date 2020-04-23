@@ -187,7 +187,7 @@ class Stylize(Resource):
         
         images.insert_one({
             'username': username,
-            'file_id': supersized_img_id
+            'file_id': stylized_img_id
         })
         
         return jsonify({
