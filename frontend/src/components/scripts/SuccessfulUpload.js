@@ -22,7 +22,7 @@ class SuccessfulUpload extends React.Component {
   render() {
     const images = [];
 
-    for (var i = 0; i <= 6; i++) {
+    for (var i = 0; i <= 7; i++) {
       images.push(
         process.env.PUBLIC_URL + "style_images/style_img" + i + ".jpg"
       );
