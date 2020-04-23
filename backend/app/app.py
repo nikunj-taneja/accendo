@@ -31,6 +31,12 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def already_liked(file_id, username):
+    return images.find({
+        'file_id': file_id,
+        'likes': username
+    }).count() == 1
+
 class Register(Resource):
     def post(self):
         data = request.form
@@ -121,20 +127,42 @@ class Upload(Resource):
                 'msg': 'No file in request'
             })
 
-@app.route('/file/<file_id>')
-def get_file(file_id):
-    if fs.exists(ObjectId(file_id)):
-        return send_file(fs.get(ObjectId(file_id)), attachment_filename = str(file_id) + '.jpg')
-    else:
-        return jsonify({
-            'status': 404,
-            'msg': 'File not found'
-        })
+
+class GetFile(Resource):
+    def get(self, file_id):
+        if fs.exists(ObjectId(file_id)):
+            return send_file(fs.get(ObjectId(file_id)), attachment_filename = str(file_id) + '.jpg')
+        else:
+            return jsonify({
+                'status': 404,
+                'msg': 'File not found'
+            })
+
+
+class GetInfo(Resource):
+    def get(self, file_id):
+        if fs.exists(ObjectId(file_id)):
+            root = 'http://localhost:5000/file/'
+            img = images.find({'file_id': ObjectId(file_id)})[0]
+            res = {
+                'status': 200,
+                'msg': 'Image info compiled successfully',
+                'username': img['username'],
+                'image_url': root + str(img['file_id']),
+                'file_id': str(img['file_id']),
+                'likes': img['likes'],
+                'like_count': img['like_count'],
+            }
+            return jsonify(res)
+        else:
+            return  jsonify({
+                'status': 404,
+                'msg': 'File not found'
+            })
 
 
 class Stylize(Resource):
     def post(self):
-        # start = time.time()
         username = request.form['username']
         content_img_id = ObjectId(request.form['file_id'])
         if 'style_img' in request.files:
@@ -146,7 +174,6 @@ class Stylize(Resource):
                 })
             if style_img and allowed_file(style_img.filename):
                 style_img_id = fs.put(style_img)
-                # client.save_file(filename, content_img)
                 images.insert_one({
                     'username': username,
                     'img': style_img_id
@@ -156,10 +183,7 @@ class Stylize(Resource):
                 "status": 301,
                 "msg": "Invalid style image"
             })
-        # style_time = time.time()
         stylized_img_id = style_transfer.process(content_img_id, style_img_id)
-        # print('Styling time:', time.time() - style_time)
-        # print('Total time:', time.time() - start)
         return jsonify({
             'status': 200,
             'msg': 'Image stylized successfully.',
@@ -169,43 +193,155 @@ class Stylize(Resource):
 
 class Supersize(Resource):
     def post(self):
-        # start = time.time()
         username = request.form['username']
         img_id = ObjectId(request.form['file_id'])
-        # if 'image' in request.files:
-        #     img = fs.get(ObjectId(file_id))
-        #     if img.filename == '':
-        #         # TODO
-        #         return 0
-        #     if img and allowed_file(img.filename):
-        #         img_id = fs.put(img)
-        #         # client.save_file(filename, content_img)
-        #         images.insert_one({'username': username, 'img': img_id})
-        # else:
-        #     return jsonify({
-        #         "status": 301,
-        #         "msg": "Invalid input"
-        #     })
-
-        # supersize = time.time()
         supersized_img_id = supersize_gan.process(img_id)
+        
         images.insert_one({
             'username': username,
             'file_id': supersized_img_id
         })
-        # print('Styling time:', time.time() - supersize)
-        # print('Total time:', time.time() - start)
+        
         return jsonify({
             'status': 200,
             'msg': 'Image supersized successfully.',
             'file_id': str(supersized_img_id)
         })
 
+
+class Gallery(Resource):
+    def get(self, username):
+        res = {
+            'status': 200,
+            'msg': 'Gallery posts compiled successfully',
+            'images': []
+        }
+        for img in images.find({'username': username}):
+            root = 'http://localhost:5000/file/'
+            temp = {
+                'username': img['username'],
+                'image_url': root + str(img['file_id']),
+                'file_id': str(img['file_id']),
+                'public': img['public'],
+                'likes': img['likes'],
+                'like_count': img['like_count'],
+            }
+            res['images'].append(temp)
+        return jsonify(res)
+
+
+class Post(Resource):
+    def post(self):
+        data = request.form
+        username = data['username']
+        file_id = ObjectId(data['file_id'])
+        if username and file_id and fs.exists(file_id):
+            images.update_one({
+                'file_id': file_id,
+            },{
+                '$set': {
+                    'public': True,
+                    'likes': [],
+                    'like_count': 0
+                }
+            })
+            like_count = images.find({'file_id': file_id})[0]['like_count']
+            return jsonify({
+                'status': 200,
+                'msg': 'The image has been made public successfully',
+                'file_id': str(file_id),
+                'like_count': like_count
+            })
+        else:
+            return jsonify({
+                'status': 301,
+                'msg': 'Invalid file_id'
+            })
+
+
+class Like(Resource):
+    def post(self):
+        data = request.form
+        username = data['username']
+        file_id = ObjectId(data['file_id'])
+        if username and file_id and fs.exists(file_id):
+            if not already_liked(file_id, username):
+                images.update_one({
+                    'file_id': file_id,
+                },{
+                    '$push': {
+                        'likes': username,
+                    },
+                    '$inc': {
+                        'like_count': 1
+                    }
+                }, upsert=True)
+                likes = images.find({'file_id': file_id})[0]['likes']
+                like_count = images.find({'file_id': file_id})[0]['like_count']
+                return jsonify({
+                    'status': 200,
+                    'msg': 'The image liked successfully',
+                    'file_id': str(file_id),
+                    'likes': likes,
+                    'like_count': like_count
+                })
+            else:
+                images.update_one({
+                    'file_id': file_id,
+                },{
+                    '$pull': {
+                        'likes': username,
+                    },
+                    '$inc': {
+                        'like_count': -1
+                    }
+                }, upsert=False)
+                likes = images.find({'file_id': file_id})[0]['likes']
+                like_count = images.find({'file_id': file_id})[0]['like_count']
+                return jsonify({
+                    'status': 200,
+                    'msg': 'The image unliked successfully',
+                    'file_id': str(file_id),
+                    'likes': likes,
+                    'like_count': like_count
+                })
+        else:
+            return jsonify({
+                'status': 301,
+                'msg': 'Invalid file_id'
+            })
+    
+
+class Community(Resource):
+    def get(self):
+        res = {
+            'status': 200,
+            'msg': 'Community posts compiled successfully',
+            'images': []
+        }
+        for img in images.find({'public': True}):
+            root = 'http://localhost:5000/file/'
+            temp = {
+                'username': img['username'],
+                'image_url': root + str(img['file_id']),
+                'file_id': str(img['file_id']),
+                'likes': img['likes'],
+                'like_count': img['like_count'],
+            }
+            res['images'].append(temp)
+        return jsonify(res)
+
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
 api.add_resource(Upload, '/upload')
 api.add_resource(Stylize, '/stylize')
 api.add_resource(Supersize, '/supersize')
+api.add_resource(GetFile, '/file/<string:file_id>')
+api.add_resource(GetInfo, '/info/<string:file_id>')
+api.add_resource(Post, '/post')
+api.add_resource(Like, '/like')
+api.add_resource(Community, '/community')
+api.add_resource(Gallery, '/gallery/<string:username>')
 
 @app.route('/')
 def testing():
@@ -214,33 +350,49 @@ def testing():
     <title>testing</title>
     <h1>Register</h1>
     <form method=POST action='/register' enctype=multipart/form-data>
-      Username: <input type=text name=username id=username>
-      Password: <input type=password name=password id=password>
-      Email: <input type=email name=email id=email>
-      <br>
-      <input type=submit value=Submit>
+        Username: <input type=text name=username id=username>
+        Password: <input type=password name=password id=password>
+        Email: <input type=email name=email id=email>
+        <input type=submit value=Submit>
     </form>
     <h1>Login</h1>
     <form method=POST action='/login' enctype=multipart/form-data>
-      Username: <input type=text name=username id=username>
-      Password: <input type=password name=password id=password>
-      <br>
-      <input type=submit value=Submit>
+        Username: <input type=text name=username id=username>
+        Password: <input type=password name=password id=password>
+        <input type=submit value=Submit>
+    </form>
+    <h1>Upload</h1>
+    <form action='/upload' method=POST enctype=multipart/form-data>
+        Username: <input type=text name=username>
+        <input type=file name=image>
+        <input type=submit value=Upload>
     </form>
     <h1>Stylize</h1>
     <form action='/stylize' method=POST enctype=multipart/form-data>
-      <input type=text name=username>
-      <input type=file name=content_img>
-      <input type=file name=style_img>
-      <input type=submit value=Upload>
+        Username: <input type=text name=username>
+        File_Id: <input type=text name=file_id>
+        Style_Img: <input type=file name=style_img>
+        <input type=submit value=Stylize>
     </form>
-    <h1>Upload</h1>
-     <form action='/upload' method=POST enctype=multipart/form-data>
-      <input type=text name=username>
-      <input type=file name=image>
-      <input type=submit value=Upload>
+    <h1>Supersize</h1>
+    <form action='/supersize' method=POST enctype=multipart/form-data>
+        Username: <input type=text name=username>
+        File_Id: <input type=text name=file_id>
+        <input type=submit value=Supersize>
+    </form>
+    <h1>Post</h1>
+    <form action='/post' method=POST enctype=multipart/form-data>
+        Username: <input type=text name=username>
+        File_Id: <input type=text name=file_id>
+        <input type=submit value=Post>
+    </form>
+    <h1>Like</h1>
+    <form action='/like' method=POST enctype=multipart/form-data>
+        Username: <input type=text name=username>
+        File_Id: <input type=text name=file_id>
+        <input type=submit value=Like>
     </form>
     '''
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+    app.run(host="0.0.0.0")
