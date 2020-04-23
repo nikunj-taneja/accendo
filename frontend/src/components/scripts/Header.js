@@ -22,7 +22,7 @@ class Header extends React.Component {
         <Navbar.Collapse>
           <Nav className="mr-auto">
             <Nav.Item>
-              <Link to="/Gallery">Gallery</Link>
+              <Link to="/CommunityGallery">Gallery</Link>
             </Nav.Item>
             <Nav.Item>
               <Link to="/Profile">Profile</Link>

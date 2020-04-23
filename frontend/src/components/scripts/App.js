@@ -26,7 +26,7 @@ class App extends React.Component {
             <Route path="/" exact>
               {this.context.isAuth ? <ProfileWrapper /> : <UserPage />}
             </Route>
-            <Route path="/gallery" exact component={Gallery} />
+            <Route path="/communitygallery" exact component={Gallery} />
             <Route path="/profile" exact component={ProfileWrapper} />
             <Route path="/signup" exact component={SignUp} />
           </Switch>
