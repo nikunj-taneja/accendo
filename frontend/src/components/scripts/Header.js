@@ -46,7 +46,11 @@ class Header extends React.Component {
                 </Button>
               </Nav.Item>
             ) : (
-              ""
+              <Nav.Item>
+                <Button style={{ marginLeft: 20 }}>
+                  <Link to="/">Login</Link>
+                </Button>
+              </Nav.Item>
             )}
           </Nav>
         </Navbar.Collapse>
