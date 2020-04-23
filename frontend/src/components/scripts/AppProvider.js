@@ -103,8 +103,8 @@ class AppProvider extends React.Component {
     return (
       <LoadingOverlay
         styles={{
-          overlay: (base) => ({ ...base, height: "100%" }),
-          wrapper: (base) => ({ ...base, height: "100%" }),
+          overlay: (base) => ({ ...base, height: "100%", overflow: "auto" }),
+          wrapper: (base) => ({ ...base, height: "100%", overflow: "auto" }),
         }}
         active={this.state.isWaiting}
         spinner
