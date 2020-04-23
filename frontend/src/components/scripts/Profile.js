@@ -28,16 +28,17 @@ class Profile extends React.Component {
     formdata.append("image", file, file.fileName);
     formdata.set("username", this.context.username);
 
+    this.context.setWaiting(true);
     const response = await axios.post("/upload", formdata, {
       headers: {
         accept: "application/json",
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(response);
     if (response.status === 200) {
       this.setState({ uploaded: true, file_id: response.data["file_id"] });
     }
+    this.context.setWaiting(false);
   };
 
   render() {
