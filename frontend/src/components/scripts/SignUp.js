@@ -40,23 +40,17 @@ class SignUp extends React.Component {
     switch (name) {
       case "username":
         errors.username =
-          value.length >= 6 || value.length === 0
-            ? ""
-            : "Username must be 6 characters or longer";
+          value.length >= 6 ? "" : "Username must be 6 characters or longer";
         break;
       case "email":
-        errors.email =
-          validEmailRegex.test(value) || value.length === 0
-            ? ""
-            : "Email is not valid!";
+        errors.email = validEmailRegex.test(value) ? "" : "Email is not valid!";
         break;
       case "password":
-        errors.password = errors.confirm_pass =
-          this.state.confirm_pass === value ? "" : "Passwords do not match!";
-
+        errors.password =
+          value.length >= 6 ? "" : "Password must be 6 characters or longer";
         break;
       case "confirm_pass":
-        errors.password = errors.confirm_pass =
+        errors.confirm_pass =
           value === this.state.password ? "" : "Passwords do not match!";
         break;
       default:
@@ -70,8 +64,17 @@ class SignUp extends React.Component {
         valid = false;
       }
     }
+
+    const formvals = this.state;
+
+    const noEmpty =
+      formvals.email.length &&
+      formvals.confirm_pass.length &&
+      formvals.password.length &&
+      formvals.username.length;
+
     this.setState({
-      valid: valid,
+      valid: valid && noEmpty,
     });
   };
 
@@ -150,7 +153,7 @@ class SignUp extends React.Component {
           </Form.Control.Feedback>
         </Form.Group>
         <div className="text-left">
-          <Button type="submit" size="lg">
+          <Button disabled={!this.state.valid} type="submit" size="lg">
             Submit
           </Button>
         </div>
