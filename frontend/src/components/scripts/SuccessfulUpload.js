@@ -42,7 +42,7 @@ class SuccessfulUpload extends React.Component {
       >
         <h3>Your image has been uploaded!</h3>
         <Tabs
-          id="tabs"
+          className="tabs"
           activeKey={this.state.key}
           onSelect={(k) => this.setState({ key: k })}
         >

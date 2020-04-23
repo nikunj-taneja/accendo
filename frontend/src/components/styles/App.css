@@ -49,10 +49,38 @@ body {
 }
 
 .btn-primary,
-.btn-primary:hover,
 .btn-primary:active,
 .btn-primary:visited {
-  background-color: #28b161 !important;
+  background-color: #1c7b43 !important;
   color: #eee !important;
   border: none !important;
+}
+
+.btn-primary:hover {
+  background-color: #249f57 !important;
+  color: #eee !important;
+  border: none !important;
+}
+
+.tabs {
+  border-bottom: 1px solid #28b161;
+}
+.tabs a {
+  background-color: #141e30 !important;
+  color: white !important;
+  border-bottom: 1px solid #28b161 !important;
+}
+
+/* Active tab */
+.tabs a.active,
+.tabs a.active:hover,
+.tabs a.active:focus {
+  background-color: #141e30 !important;
+  color: #0df06c !important;
+  border: 1px solid #28b161 !important;
+  border-bottom: none !important;
+}
+
+.tabs a:hover {
+  border: 1px solid #28b161 !important;
 }
