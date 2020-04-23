@@ -80,6 +80,7 @@ class SuccessfulUpload extends React.Component {
               </Row>
             </Container>
             <Button
+              disabled={this.state.selected_index === null}
               size="lg"
               block
               className="mt-3"
