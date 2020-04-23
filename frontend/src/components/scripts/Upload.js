@@ -108,10 +108,12 @@ class Upload extends React.Component {
                     this.state.loading ? (
                       <Spinner animation="grow" />
                     ) : (
-                      <img
+                      <Image
+                        style={{ maxHeight: 400, width: "auto" }}
+                        fluid
                         src={this.state.loadedFile}
                         className="thumbImg"
-                      ></img>
+                      />
                     )
                   ) : (
                     ""
