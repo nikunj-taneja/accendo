@@ -77,7 +77,7 @@ class Upload extends React.Component {
                   <Image
                     rounded
                     alt={obj.image_url}
-                    src={obj.image_url}
+                    src={"/file/" + obj.file_id}
                     style={{ width: 300 }}
                   />
                 </div>

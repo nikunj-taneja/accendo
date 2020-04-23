@@ -42,7 +42,7 @@ class ImageCard extends React.Component {
   render() {
     return (
       <div className="imgCard">
-        <img className="innerImg" src={this.img.image_url} />
+        <img className="innerImg" src={"/file/" + this.img.file_id} />
         <br />
         <div>
           <h5 style={{ display: "inline" }} className="likeCount">
