@@ -21,19 +21,16 @@ fs = GridFS(db)
 users = db.users
 images = db.images
 
-
+# helper functions for the APIs
 def user_exists(username):
     return users.find({"username": username}).count() != 0
-
 
 def email_exists(email):
     return users.find({"email": email}).count() != 0
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 def already_liked(file_id, username):
     return images.find({
@@ -41,6 +38,8 @@ def already_liked(file_id, username):
         'likes': username
     }).count() == 1
 
+
+# API definitions
 
 class Register(Resource):
     def post(self):
@@ -351,7 +350,7 @@ api.add_resource(GetFile, '/file/<string:file_id>')
 api.add_resource(GetInfo, '/info/<string:file_id>')
 api.add_resource(Gallery, '/gallery/<string:username>')
 
-
+# for testing purposes
 @app.route('/')
 def testing():
     return '''
@@ -360,6 +359,6 @@ def testing():
     <h1>API is up!</h1>
     '''
 
-
+# set host="0.0.0.0" for docker
 if __name__ == "__main__":
     app.run(host="0.0.0.0")

@@ -27,9 +27,7 @@ class GramMatrix(nn.Module):
 class CoMatch(nn.Module):
     def __init__(self, C, B=1):
         super(CoMatch, self).__init__()
-        # B is equal to 1 or input mini_batch
         self.weight = nn.Parameter(torch.Tensor(1, C, C), requires_grad=True)
-        # non-parameter buffer
         self.G = Variable(torch.Tensor(B, C, C), requires_grad=True)
         self.C = C
         self.reset_parameters()
