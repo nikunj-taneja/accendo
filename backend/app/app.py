@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 import time
 from bson.objectid import ObjectId
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg'}
 
 app = Flask(__name__)
 api = Api(app)
@@ -149,7 +149,7 @@ class GetFile(Resource):
 class GetInfo(Resource):
     def get(self, file_id):
         if fs.exists(ObjectId(file_id)):
-            root = request.host_url + 'file/'
+            root = str(request.host_url) + 'file/'
             img = images.find({'file_id': ObjectId(file_id)})[0]
             res = {
                 'status': 200,
@@ -247,7 +247,7 @@ class Post(Resource):
         if username and file_id and fs.exists(file_id):
             images.update_one({
                 'file_id': file_id,
-            }, {
+            },{
                 '$set': {
                     'public': True,
                     'likes': [],
@@ -275,7 +275,7 @@ class Like(Resource):
             if not already_liked(file_id, username):
                 images.update_one({
                     'file_id': file_id,
-                }, {
+                },{
                     '$push': {
                         'likes': username,
                     },
@@ -295,7 +295,7 @@ class Like(Resource):
             else:
                 images.update_one({
                     'file_id': file_id,
-                }, {
+                },{
                     '$pull': {
                         'likes': username,
                     },
@@ -339,16 +339,16 @@ class Community(Resource):
         return jsonify(res)
 
 
-api.add_resource(Register, '/register')
+api.add_resource(Post, '/post')
+api.add_resource(Like, '/like')
 api.add_resource(Login, '/login')
 api.add_resource(Upload, '/upload')
 api.add_resource(Stylize, '/stylize')
+api.add_resource(Register, '/register')
 api.add_resource(Supersize, '/supersize')
+api.add_resource(Community, '/community')
 api.add_resource(GetFile, '/file/<string:file_id>')
 api.add_resource(GetInfo, '/info/<string:file_id>')
-api.add_resource(Post, '/post')
-api.add_resource(Like, '/like')
-api.add_resource(Community, '/community')
 api.add_resource(Gallery, '/gallery/<string:username>')
 
 
@@ -357,50 +357,7 @@ def testing():
     return '''
     <!doctype html>
     <title>testing</title>
-    <h1>Register</h1>
-    <form method=POST action='/register' enctype=multipart/form-data>
-        Username: <input type=text name=username id=username>
-        Password: <input type=password name=password id=password>
-        Email: <input type=email name=email id=email>
-        <input type=submit value=Submit>
-    </form>
-    <h1>Login</h1>
-    <form method=POST action='/login' enctype=multipart/form-data>
-        Username: <input type=text name=username id=username>
-        Password: <input type=password name=password id=password>
-        <input type=submit value=Submit>
-    </form>
-    <h1>Upload</h1>
-    <form action='/upload' method=POST enctype=multipart/form-data>
-        Username: <input type=text name=username>
-        <input type=file name=image>
-        <input type=submit value=Upload>
-    </form>
-    <h1>Stylize</h1>
-    <form action='/stylize' method=POST enctype=multipart/form-data>
-        Username: <input type=text name=username>
-        File_Id: <input type=text name=file_id>
-        Style_Img: <input type=file name=style_img>
-        <input type=submit value=Stylize>
-    </form>
-    <h1>Supersize</h1>
-    <form action='/supersize' method=POST enctype=multipart/form-data>
-        Username: <input type=text name=username>
-        File_Id: <input type=text name=file_id>
-        <input type=submit value=Supersize>
-    </form>
-    <h1>Post</h1>
-    <form action='/post' method=POST enctype=multipart/form-data>
-        Username: <input type=text name=username>
-        File_Id: <input type=text name=file_id>
-        <input type=submit value=Post>
-    </form>
-    <h1>Like</h1>
-    <form action='/like' method=POST enctype=multipart/form-data>
-        Username: <input type=text name=username>
-        File_Id: <input type=text name=file_id>
-        <input type=submit value=Like>
-    </form>
+    <h1>API is up!</h1>
     '''
 
 
