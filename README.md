@@ -6,9 +6,10 @@ CSCI3100 Project to create a web app where users can upload images, have them su
 
 ## Frontend
 
-![gallery](/showcase_images/frontend/gallery.png)
-![login](/showcase_images/frontend/login.PNG)
-![signup](/showcase_images/frontend/signup.PNG)
+![login](/showcase_images/login-signup.PNG)
+![stylize](/showcase_images/Stylize.PNG)
+![successful_stylize](/showcase_images/successful_stylize.PNG)
+![community](/showcase_images/community.PNG)
 
 ## Deep Learning Models
 
