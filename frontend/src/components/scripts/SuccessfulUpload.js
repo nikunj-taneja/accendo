@@ -4,6 +4,8 @@ import { Container, Button, Tab, Tabs, Row, Col, Image } from "react-bootstrap";
 
 import "../styles/ImagePage.css";
 
+//Shows the user's uploaded image and gives them the option to either stylize
+//or supersize.
 class SuccessfulUpload extends React.Component {
   state = {
     key: "supersize",

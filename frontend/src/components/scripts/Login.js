@@ -4,6 +4,7 @@ import AuthContext from "./AuthContext";
 
 import { Button, Form, Alert } from "react-bootstrap";
 
+//Manages login form data and submission
 class Login extends React.Component {
   static contextType = AuthContext;
 

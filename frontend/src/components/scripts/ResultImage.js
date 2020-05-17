@@ -5,6 +5,8 @@ import AuthContext from "./AuthContext";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
 
+//Shows the result of stylize and supersize
+//Gives the user the option to post the result to community
 class ResultImage extends React.Component {
   state = {
     redirect_to_community: false,

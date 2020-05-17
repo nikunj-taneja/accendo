@@ -3,7 +3,6 @@ import Masonry from "react-masonry-component";
 
 import "../styles/CommunityGallery.css";
 
-import { Container } from "react-bootstrap";
 import AuthContext from "./AuthContext";
 import ImageCard from "./ImageCard";
 
@@ -38,6 +37,7 @@ class CommunityGallery extends React.Component {
           options={masonryOptions}
           disableImagesLoaded={false}
         >
+          //Maps all images in the community gallery into Image Cards
           {this.state.images.map((obj, index) => {
             return (
               <div className="grid-img" key={index}>

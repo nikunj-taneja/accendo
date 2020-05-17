@@ -6,11 +6,14 @@ import axios from "axios";
 import ResultImage from "./ResultImage";
 import SuccessfulUpload from "./SuccessfulUpload";
 
+//Displays the result image of stylize/supersize
+//and shows the successful upload page
 class ImagePage extends React.Component {
   state = { stylized: false, resultId: null };
 
   static contextType = AuthContext;
 
+  //Calls the API to run the Supersize model on the image
   handleSupersize = async () => {
     var data = new FormData();
 
@@ -33,11 +36,13 @@ class ImagePage extends React.Component {
     });
   };
 
+  //uploads the style image to the server and calls the server to stylize
   handleStylize = async (img_url) => {
     console.log(img_url);
 
     this.context.setWaiting(true);
 
+    //Fetching and reading the style image the user has picked
     var response = await fetch(img_url);
     var blob = await response.blob();
 

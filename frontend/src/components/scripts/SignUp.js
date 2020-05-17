@@ -6,6 +6,7 @@ import AuthContext from "./AuthContext";
 
 import "../styles/SignUp.css";
 
+//SignUp form and validation
 class SignUp extends React.Component {
   static contextType = AuthContext;
 

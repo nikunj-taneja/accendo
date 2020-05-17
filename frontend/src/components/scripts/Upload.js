@@ -12,6 +12,7 @@ const masonryOptions = {
   gutter: 5,
 };
 
+//Upload component. Shows the upload box, and user images.
 class Upload extends React.Component {
   state = {
     file: null,
@@ -35,6 +36,7 @@ class Upload extends React.Component {
     this.setState({ init: true, images: this.context.userImages });
   };
 
+  //Handles user upload
   handleDrop = (acceptedFiles) => {
     const reader = new FileReader();
 
@@ -61,6 +63,7 @@ class Upload extends React.Component {
 
   render() {
     var imgs;
+    //Shows the user's images if they have uploaded any
     if (this.state.images.length > 0) {
       imgs = (
         <div>

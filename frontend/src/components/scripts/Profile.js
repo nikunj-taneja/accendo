@@ -9,6 +9,7 @@ import ImagePage from "./ImagePage";
 
 import "../styles/Profile.css";
 
+//User profile page. Shows the image upload form
 class Profile extends React.Component {
   static contextType = AuthContext;
   state = {

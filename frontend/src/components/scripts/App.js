@@ -5,7 +5,7 @@ import Header from "./Header";
 import Gallery from "./Gallery";
 import ProfileWrapper from "./ProfileWrapper";
 import SignUp from "./SignUp";
-import UserPage from "./UserPage";
+import LoginSignup from "./UserPage";
 
 import "../styles/App.css";
 
@@ -13,6 +13,7 @@ import AuthContext from "./AuthContext";
 
 import { Container } from "react-bootstrap";
 
+//Managing the page routes
 class App extends React.Component {
   static contextType = AuthContext;
 
@@ -24,7 +25,7 @@ class App extends React.Component {
         <Container className="main-body">
           <Switch>
             <Route path="/" exact>
-              {this.context.isAuth ? <ProfileWrapper /> : <UserPage />}
+              {this.context.isAuth ? <ProfileWrapper /> : <LoginSignup />}
             </Route>
             <Route path="/communitygallery" exact component={Gallery} />
             <Route path="/profile" exact component={ProfileWrapper} />

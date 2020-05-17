@@ -5,11 +5,14 @@ import { FaHeart } from "react-icons/fa";
 import AuthContext from "./AuthContext";
 import axios from "axios";
 
+//The Card used to display images in the community page
+//It handles layout and the like functionality
 class ImageCard extends React.Component {
   state = { liked: false };
 
   static contextType = AuthContext;
 
+  //Find out if user has already liked this images and set state accordingly
   componentWillMount() {
     this.img = this.props.img;
 

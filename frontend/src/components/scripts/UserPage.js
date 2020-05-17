@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import SignUp from "./SignUp";
 import Login from "./Login";
 
-class UserPage extends React.Component {
+class LoginSignup extends React.Component {
   render() {
     return (
       <Row>
@@ -24,4 +24,4 @@ class UserPage extends React.Component {
   }
 }
 
-export default UserPage;
+export default LoginSignup;

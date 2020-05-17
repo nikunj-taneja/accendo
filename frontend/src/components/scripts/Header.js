@@ -8,6 +8,7 @@ import AuthContext from "./AuthContext";
 
 import "../styles/Header.css";
 
+//Builds the Navigation bar at the top of the page
 class Header extends React.Component {
   static contextType = AuthContext;
 

@@ -6,10 +6,14 @@ import LoadingOverlay from "react-loading-overlay";
 
 import App from "./App";
 
+//This stores the state of the application and allows other parts
+//To change it.
+//We are storing the images in the community page, user page,
+//and Authentication state
 class AppProvider extends React.Component {
   state = {
-    isAuth: false,
-    isWaiting: false,
+    isAuth: false, //Whether user is logged in or not
+    isWaiting: false, //waiting state, should show loading overlay when true
     username: null,
     communityImages: [],
     userImages: [],
