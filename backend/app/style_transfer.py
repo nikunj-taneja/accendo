@@ -24,19 +24,12 @@ class GramMatrix(nn.Module):
         gram = features.bmm(features_t) / (ch * h * w)
         return gram
 
-# define Co-Match layer
 
-
+# define Co-Match layer for tuning feature map with Gram Matrix
 class CoMatch(nn.Module):
-    """ Co-Match Layer for tuning the 
-    feature map with target Gram Matrix
-    """
-
     def __init__(self, C, B=1):
         super(CoMatch, self).__init__()
-        # B is equal to 1 or input mini_batch
         self.weight = nn.Parameter(torch.Tensor(1, C, C), requires_grad=True)
-        # non-parameter buffer
         self.G = Variable(torch.Tensor(B, C, C), requires_grad=True)
         self.C = C
         self.reset_parameters()
@@ -48,16 +41,14 @@ class CoMatch(nn.Module):
         self.G = target
 
     def forward(self, X):
-        # input X is a 3 dimensional feature map
         self.P = torch.bmm(self.weight.expand_as(self.G), self.G)
         return torch.bmm(self.P.transpose(1, 2).expand(X.size(0), self.C, self.C), X.view(X.size(0), X.size(1), -1)).view_as(X)
 
     def __repr__(self):
         return self.__class__.__name__ + '(' + 'N x ' + str(self.C) + ')'
 
-# some basic layers
 
-
+# define some basic layers
 class ConvLayer(nn.Module):
     def __init__(self, in_channels, out_channels, kernel_size, stride):
         super(ConvLayer, self).__init__()
@@ -90,9 +81,8 @@ class UpSampleConvLayer(nn.Module):
         out = self.conv2d(x)
         return out
 
-# pre activation layers
 
-
+# define pre activation layers
 class Bottleneck(nn.Module):
     def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=nn.BatchNorm2d):
         super(Bottleneck, self).__init__()
@@ -142,9 +132,8 @@ class UpSampleBottleneck(nn.Module):
     def forward(self, x):
         return self.residual_layer(x) + self.conv_block(x)
 
-# the style transfer model
 
-
+# define the style transfer model
 class Model(nn.Module):
     def __init__(self, input_nc=3, output_nc=3, ngf=64, norm_layer=nn.InstanceNorm2d, n_blocks=6, gpu_ids=[]):
         super(Model, self).__init__()
@@ -186,6 +175,8 @@ class Model(nn.Module):
 
     def forward(self, input):
         return self.model(input)
+
+# define helper functions for image type conversions
 
 
 def load_rgb_image(filename, size=None, scale=None, keep_asp=False):
@@ -231,7 +222,7 @@ def preprocess_batch(batch):
     return batch
 
 
-def process(content_img_path, style_img_path):
+def process(content_img_id, style_img_id):
     content_image = load_rgb_image(
         content_img_path,
         size=256,
