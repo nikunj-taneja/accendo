@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 
 services:
     app:
@@ -7,13 +7,6 @@ services:
             - "5000:5000"
         links:
             - db
-        deploy:
-            resources:
-                 limits:
-                     cpus: '0.50'
-                     memory: 8G
-                 reservations:
-                     cpus: '0.25'
-                     memory: 4G
+
     db:
         build: ./db
