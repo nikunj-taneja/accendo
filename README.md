@@ -1,6 +1,6 @@
 # Accendo
 
-CSCI3100 Project to create a web app where users can upload images, have them supersized and/or stylized using Machine Learning, and optionally post them on the community gallery
+CSCI3100 Project to create a web app where users can upload images, have them supersized and/or stylized using deep learning models (neural style transfer & Super Resolution GAN), and optionally post them on the community gallery.
 
 # Showcase Images
 
@@ -14,7 +14,7 @@ CSCI3100 Project to create a web app where users can upload images, have them su
 
 ## Deep Learning Models
 
-### Stylize
+### Neural Style Transfer
 
 #### Example:
 
