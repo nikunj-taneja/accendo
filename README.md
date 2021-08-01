@@ -10,8 +10,8 @@ Tech stack: React, Flask, PyTorch, MongoDB, Docker
 ## Architecture
 
 <p float="left">
-<img src="https://i.ibb.co/Pw0yWbs/Screenshot-2021-07-29-at-10-56-54-PM.png" alt="Screenshot-2021-07-29-at-10-56-54-PM" border="0" height=350>
-<img src="https://i.ibb.co/ftpycds/Screenshot-2021-07-29-at-10-45-11-PM.png" alt="Screenshot-2021-07-29-at-10-45-11-PM" border="0" height=350>
+<img src="https://i.ibb.co/Pw0yWbs/Screenshot-2021-07-29-at-10-56-54-PM.png" alt="Screenshot-2021-07-29-at-10-56-54-PM" border="0" height=330>
+<img src="https://i.ibb.co/ftpycds/Screenshot-2021-07-29-at-10-45-11-PM.png" alt="Screenshot-2021-07-29-at-10-45-11-PM" border="0" height=330>
 </p>
 
 ## Frontend 
